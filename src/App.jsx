@@ -1,8 +1,5 @@
-import { useState } from "react";
-
 function App() {
-  return <div>HOLAS</div>;
-  S;
+  return <div data-testid="MAIN-APP">HOLAS</div>;
 }
 
 export default App;
