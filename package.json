@@ -15,8 +15,15 @@
     "coverage": "npm test --coverage --watchAll --collectCoverageFrom='src/components/**/*.{js,jsx}'"
   },
   "dependencies": {
+    "@emotion/react": "^11.11.4",
+    "@emotion/styled": "^11.11.5",
+    "@fontsource/roboto": "^5.0.13",
+    "@mui/icons-material": "^5.15.19",
+    "@mui/material": "^5.15.19",
+    "notistack": "^3.0.1",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "react-router-dom": "^6.23.1"
   },
   "devDependencies": {
     "@babel/preset-env": "^7.24.7",

@@ -1,14 +1,9 @@
 {
   "compilerOptions": {
-    "moduleResolution": "Node",
-    "resolveJsonModule": true,
-    "isolatedModules": true,
-    "noEmit": true,
-    "jsx": "react-jsx",
-    "baseUrl": "./src",
+    "baseUrl": ".",
     "paths": {
-      "@/*": ["./*"]
+      "@/*": ["./src/*"]
     }
   },
-  "include": ["src", "vite.config.js", "./jest.setup.js"]
+  "include": ["src"]
 }
