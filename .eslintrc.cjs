@@ -6,6 +6,7 @@ module.exports = {
     "plugin:react/jsx-runtime",
     "react-app/jest",
     "plugin:react-hooks/recommended",
+    "react-app",
   ],
   ignorePatterns: ["dist", ".eslintrc.cjs"],
   parserOptions: {
@@ -16,7 +17,7 @@ module.exports = {
     },
   },
   settings: { react: { version: "18.2" } },
-  plugins: ["react-refresh", "react-hooks", "import", "jest"],
+  plugins: ["react-refresh", "react-hooks"],
   rules: {
     "react/prop-types": "off",
     "react-refresh/only-export-components": [
@@ -24,5 +25,8 @@ module.exports = {
       { allowConstantExport: true },
     ],
     "react/no-unknown-property": ["error", { ignore: ["css"] }],
+    "react-hooks/rules-of-hooks": "error",
+    "react-hooks/exhaustive-deps": "warn",
+    "no-debugger": 0,
   },
 };
