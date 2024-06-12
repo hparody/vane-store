@@ -13,7 +13,7 @@ let theme = createTheme({
     secondary: {
       main: "#BFBFBF",
     },
-    mode: "dark",
+    mode: "light",
   },
   typography: {
     fontFamily: [
