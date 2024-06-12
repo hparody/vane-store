@@ -1,6 +1,6 @@
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import PropTypes from "prop-types";
-import { Box, Button, Paper, TextField, IconButton, Link } from "@mui/material";
+import { Box, Button, TextField, IconButton, Link } from "@mui/material";
 import InputAdornment from "@mui/material/InputAdornment";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
@@ -10,6 +10,8 @@ import styled from "@emotion/styled";
 
 import Logo from "@/assets/vane-store.png";
 import PaperContainer from "./ui/PaperContainer";
+import isValidEmail from "@/utils/isValidEmail";
+import useAlert from "@/hooks/useAlert";
 
 const LogoImg = styled.img`
   aspect-ratio: inherit;
@@ -18,8 +20,18 @@ const LogoImg = styled.img`
   object-position: center;
 `;
 
+const errorMessages = {
+  username: "Por favor, ingresa un email válido.",
+  password: "Ingresa tu contraseña",
+};
+
 const LogInForm = ({ onLogInSuccessful = () => {} }) => {
-  const [values, setValues] = useState({ user: "", password: "" });
+  const { triggerAlert } = useAlert();
+  const [values, setValues] = useState({ username: "", password: "" });
+  const [errors, setErrors] = useState({
+    username: { error: false, message: "" },
+    password: { error: false, message: "" },
+  });
 
   const [showPassword, setShowPassword] = useState(false);
 
@@ -29,8 +41,48 @@ const LogInForm = ({ onLogInSuccessful = () => {} }) => {
     event.preventDefault();
   };
 
+  const areFieldsValid = useCallback(() => {
+    return !Object.values(errors).some((field) => field.error);
+  }, [errors]);
+
+  const validateField = useCallback(
+    (fieldName, fieldValue) => {
+      let hasError = false;
+      if (fieldValue === undefined || fieldValue === "") {
+        hasError = true;
+      }
+      if (fieldName === "username") {
+        hasError = !isValidEmail(fieldValue);
+      }
+      setErrors({
+        ...errors,
+        [fieldName]: {
+          error: hasError,
+          message: hasError ? errorMessages[fieldName] : "",
+        },
+      });
+    },
+    [errors]
+  );
+
+  const handleChange = useCallback(
+    (event) => {
+      setValues({ ...values, [event.target.name]: event.target.value });
+      validateField(event.target.name, event.target.value);
+    },
+    [values, validateField]
+  );
+
   const handleSubmit = () => {
-    onLogInSuccessful();
+    if (areFieldsValid()) {
+      onLogInSuccessful();
+    } else {
+      triggerAlert({
+        type: "error",
+        message:
+          "Por favor, completa todos los campos para poder iniciar sesión.",
+      });
+    }
   };
 
   return (
@@ -54,8 +106,11 @@ const LogInForm = ({ onLogInSuccessful = () => {} }) => {
           name="username"
           variant="outlined"
           type="email"
-          value={values.user}
+          value={values.username}
+          onChange={handleChange}
           required
+          error={errors.username.error}
+          helperText={errors.username.message}
           InputProps={{
             startAdornment: (
               <InputAdornment position="start">
@@ -73,6 +128,9 @@ const LogInForm = ({ onLogInSuccessful = () => {} }) => {
           type={showPassword ? "text" : "password"}
           value={values.password}
           required
+          error={errors.password.error}
+          helperText={errors.password.message}
+          onChange={handleChange}
           InputProps={{
             startAdornment: (
               <InputAdornment position="start">
@@ -100,7 +158,12 @@ const LogInForm = ({ onLogInSuccessful = () => {} }) => {
         <Link href="#" fontSize="small" sx={{ margin: "-5px 0px" }}>
           Olvidé mi contraseña
         </Link>
-        <Button type="submit" color="primary" variant="contained">
+        <Button
+          type="button"
+          color="primary"
+          variant="contained"
+          onClick={handleSubmit}
+        >
           Iniciar Sesión
         </Button>
         <Button type="button" variant="outlined" sx={{ marginTop: "-5px" }}>

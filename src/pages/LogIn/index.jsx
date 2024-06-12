@@ -13,7 +13,7 @@ const LogoImg = styled.img`
 `;
 
 const LogIn = () => {
-  const { navigate } = useNavigate();
+  const navigate = useNavigate();
 
   return (
     <Background>
