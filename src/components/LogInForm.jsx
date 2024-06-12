@@ -1,17 +1,16 @@
-import { useCallback, useState } from "react";
+import { useCallback, useState, useEffect } from "react";
 import PropTypes from "prop-types";
-import { Box, Button, TextField, IconButton, Link } from "@mui/material";
+import { Box, Button, TextField, Link } from "@mui/material";
 import InputAdornment from "@mui/material/InputAdornment";
-import Visibility from "@mui/icons-material/Visibility";
-import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import PersonIcon from "@mui/icons-material/Person";
-import LockIcon from "@mui/icons-material/Lock";
 import styled from "@emotion/styled";
 
 import Logo from "@/assets/vane-store.png";
 import PaperContainer from "./ui/PaperContainer";
 import isValidEmail from "@/utils/isValidEmail";
 import useAlert from "@/hooks/useAlert";
+import PasswordInput from "./ui/PasswordInput";
+import OTPInput from "./ui/OTPInput.jsx";
 
 const LogoImg = styled.img`
   aspect-ratio: inherit;
@@ -25,21 +24,41 @@ const errorMessages = {
   password: "Ingresa tu contraseña",
 };
 
+const OTP_CODE_LENGTH = 6;
+
 const LogInForm = ({ onLogInSuccessful = () => {}, allowSignUp = false }) => {
   const { triggerAlert } = useAlert();
+
   const [values, setValues] = useState({ username: "", password: "" });
   const [errors, setErrors] = useState({
     username: { error: false, message: "" },
     password: { error: false, message: "" },
   });
+  const [logginIn, setLogginIn] = useState(false);
+  const [showOtpValidation, setShowOtpValidation] = useState(false);
+  const [otpValue, setOtpValue] = useState("");
 
-  const [showPassword, setShowPassword] = useState(false);
-
-  const handleClickShowPassword = () => setShowPassword((show) => !show);
-
-  const handleMouseDownPassword = (event) => {
-    event.preventDefault();
-  };
+  /** Validate OTP Value */
+  useEffect(() => {
+    if (otpValue.length === OTP_CODE_LENGTH) {
+      console.log("validating otp code", otpValue);
+      /** INSERT LOGIC FOR OTP CODE VALIDATION */
+      if (otpValue === "111111") {
+        setShowOtpValidation(false);
+        setLogginIn(false);
+        triggerAlert({
+          message: "Inicio de sesión exitoso.",
+          type: "success",
+        });
+        onLogInSuccessful();
+      } else {
+        triggerAlert({
+          message: "El código de verificación es incorrecto",
+          type: "error",
+        });
+      }
+    }
+  }, [otpValue, onLogInSuccessful, triggerAlert]);
 
   const areFieldsValid = useCallback(() => {
     return !Object.values(errors).some((field) => field.error);
@@ -75,7 +94,9 @@ const LogInForm = ({ onLogInSuccessful = () => {}, allowSignUp = false }) => {
 
   const handleSubmit = () => {
     if (areFieldsValid()) {
-      onLogInSuccessful();
+      setLogginIn(true);
+      /** INSERT LOGIC FOR LOG IN */
+      setShowOtpValidation(true);
     } else {
       triggerAlert({
         type: "error",
@@ -108,6 +129,7 @@ const LogInForm = ({ onLogInSuccessful = () => {}, allowSignUp = false }) => {
           type="email"
           value={values.username}
           onChange={handleChange}
+          disabled={logginIn}
           required
           error={errors.username.error}
           helperText={errors.username.message}
@@ -119,41 +141,18 @@ const LogInForm = ({ onLogInSuccessful = () => {}, allowSignUp = false }) => {
             ),
           }}
         />
-        <TextField
+        <PasswordInput
           id="id_login_password"
           label="Contraseña"
           placeholder="Contraseña"
           name="password"
           variant="outlined"
-          type={showPassword ? "text" : "password"}
           value={values.password}
+          disabled={logginIn}
           required
           error={errors.password.error}
           helperText={errors.password.message}
           onChange={handleChange}
-          InputProps={{
-            startAdornment: (
-              <InputAdornment position="start">
-                <LockIcon aria-label="user icon" fontSize="small" />
-              </InputAdornment>
-            ),
-            endAdornment: (
-              <InputAdornment position="end">
-                <IconButton
-                  aria-label="toggle password visibility"
-                  onClick={handleClickShowPassword}
-                  onMouseDown={handleMouseDownPassword}
-                  edge="end"
-                >
-                  {showPassword ? (
-                    <VisibilityOff fontSize="small" />
-                  ) : (
-                    <Visibility fontSize="small" />
-                  )}
-                </IconButton>
-              </InputAdornment>
-            ),
-          }}
         />
         <Link href="#" fontSize="small" sx={{ margin: "-5px 0px" }}>
           Olvidé mi contraseña
@@ -163,13 +162,28 @@ const LogInForm = ({ onLogInSuccessful = () => {}, allowSignUp = false }) => {
           color="primary"
           variant="contained"
           onClick={handleSubmit}
+          disabled={logginIn}
         >
           Iniciar Sesión
         </Button>
         {allowSignUp && (
-          <Button type="button" variant="outlined" sx={{ marginTop: "-5px" }}>
+          <Button
+            type="button"
+            variant="outlined"
+            disabled={logginIn}
+            sx={{ marginTop: "-5px" }}
+          >
             Registrarme
           </Button>
+        )}
+        {showOtpValidation && (
+          <OTPInput
+            separator={<span>-</span>}
+            value={otpValue}
+            onChange={setOtpValue}
+            length={OTP_CODE_LENGTH}
+            label="Digita el código enviado a tu correo para confirmar tu inicio de sesión."
+          />
         )}
       </Box>
     </PaperContainer>
