@@ -61,8 +61,11 @@ const LogInForm = ({ onLogInSuccessful = () => {}, allowSignUp = false }) => {
   }, [otpValue, onLogInSuccessful, triggerAlert]);
 
   const areFieldsValid = useCallback(() => {
-    return !Object.values(errors).some((field) => field.error);
-  }, [errors]);
+    return (
+      Object.values(values).every((fieldValue) => fieldValue !== "") &&
+      !Object.values(errors).some((field) => field.error)
+    );
+  }, [errors, values]);
 
   const validateField = useCallback(
     (fieldName, fieldValue) => {
