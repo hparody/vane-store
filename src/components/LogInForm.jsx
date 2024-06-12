@@ -25,7 +25,7 @@ const errorMessages = {
   password: "Ingresa tu contraseña",
 };
 
-const LogInForm = ({ onLogInSuccessful = () => {} }) => {
+const LogInForm = ({ onLogInSuccessful = () => {}, allowSignUp = false }) => {
   const { triggerAlert } = useAlert();
   const [values, setValues] = useState({ username: "", password: "" });
   const [errors, setErrors] = useState({
@@ -166,9 +166,11 @@ const LogInForm = ({ onLogInSuccessful = () => {} }) => {
         >
           Iniciar Sesión
         </Button>
-        <Button type="button" variant="outlined" sx={{ marginTop: "-5px" }}>
-          Registrarme
-        </Button>
+        {allowSignUp && (
+          <Button type="button" variant="outlined" sx={{ marginTop: "-5px" }}>
+            Registrarme
+          </Button>
+        )}
       </Box>
     </PaperContainer>
   );
@@ -176,6 +178,7 @@ const LogInForm = ({ onLogInSuccessful = () => {} }) => {
 
 LogInForm.propTypes = {
   onLogInSuccessful: PropTypes.func,
+  allowSignUp: PropTypes.bool,
 };
 
 export default LogInForm;
