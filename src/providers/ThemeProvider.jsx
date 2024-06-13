@@ -46,6 +46,12 @@ theme = createTheme(theme, {
       },
       name: "black",
     }),
+    gray: theme.palette.augmentColor({
+      color: {
+        main: "##f5f5f5",
+      },
+      name: "gray",
+    }),
   },
 });
 
