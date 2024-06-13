@@ -28,7 +28,7 @@ const Link = styled(RouterLink)`
 
 const NavLink = ({ children, to, sx }) => {
   const location = useLocation();
-  console.log("location", location);
+
   const isLocationActive = useMemo(
     () => location.pathname === to,
     [location, to]
