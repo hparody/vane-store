@@ -1,5 +1,4 @@
 import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
-import { numberInputClasses } from "@mui/base/Unstable_NumberInput";
 import NumberInput from "./NumberInput";
 import { styled } from "@mui/material";
 

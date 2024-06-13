@@ -234,6 +234,7 @@ const NumberInput = ({
         }}
         id={id}
         aria-label={label}
+        value={value}
         onChange={handleChange}
         error={error}
         {...props}

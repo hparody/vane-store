@@ -41,6 +41,14 @@ const defaultValues = {
   image: "",
 };
 
+const defaultErorrs = {
+  name: defaultEmptyErrorObject,
+  description: defaultEmptyErrorObject,
+  price: defaultEmptyErrorObject,
+  stock: defaultEmptyErrorObject,
+  image: defaultEmptyErrorObject,
+};
+
 const errorMessages = {
   name: "Ingresa un nombre",
   description: "Ingresa una descripción",
@@ -56,13 +64,7 @@ const ProductForm = ({
 }) => {
   const { triggerAlert } = useAlert();
   const [values, setValues] = useState(defaultValues);
-  const [errors, setErrors] = useState({
-    name: defaultEmptyErrorObject,
-    description: defaultEmptyErrorObject,
-    price: defaultEmptyErrorObject,
-    stock: defaultEmptyErrorObject,
-    image: defaultEmptyErrorObject,
-  });
+  const [errors, setErrors] = useState(defaultErorrs);
   const [savingForm, setSavingForm] = useState(false);
   const {
     formTitle = "",
@@ -71,6 +73,7 @@ const ProductForm = ({
   } = formOptions[action];
 
   const cleanValues = () => setValues(defaultValues);
+  const cleanErorrs = () => setErrors(defaultErorrs);
 
   const isFieldValid = (fieldName, fieldValue) => {
     if (fieldName === "image") return;
@@ -136,6 +139,7 @@ const ProductForm = ({
 
   const handleClose = () => {
     cleanValues();
+    cleanErorrs();
     onCloseForm();
   };
 
