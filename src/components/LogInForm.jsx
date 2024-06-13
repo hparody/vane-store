@@ -1,6 +1,6 @@
-import { useCallback, useState, useEffect } from "react";
+import { useCallback, useState, useEffect, Fragment } from "react";
 import PropTypes from "prop-types";
-import { Box, Button, TextField, Link } from "@mui/material";
+import { Box, Button, TextField, Link, Divider } from "@mui/material";
 import InputAdornment from "@mui/material/InputAdornment";
 import PersonIcon from "@mui/icons-material/Person";
 import styled from "@emotion/styled";
@@ -180,13 +180,17 @@ const LogInForm = ({ onLogInSuccessful = () => {}, allowSignUp = false }) => {
           </Button>
         )}
         {showOtpValidation && (
-          <OTPInput
-            separator={<span>-</span>}
-            value={otpValue}
-            onChange={setOtpValue}
-            length={OTP_CODE_LENGTH}
-            label="Digita el código enviado a tu correo para confirmar tu inicio de sesión."
-          />
+          <Fragment>
+            <Divider sx={{ margin: "10px 0px" }} />
+            <OTPInput
+              name="otp-input"
+              separator={<span>-</span>}
+              value={otpValue}
+              onChange={setOtpValue}
+              length={OTP_CODE_LENGTH}
+              label="Digita el código enviado a tu correo para confirmar tu inicio de sesión."
+            />
+          </Fragment>
         )}
       </Box>
     </PaperContainer>

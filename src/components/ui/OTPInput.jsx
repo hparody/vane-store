@@ -1,17 +1,7 @@
 import { useRef, Fragment } from "react";
 import PropTypes from "prop-types";
 import { Input as BaseInput } from "@mui/base/Input";
-import { Box, styled } from "@mui/system";
-import { Typography } from "@mui/material";
-
-const blue = {
-  100: "#DAECFF",
-  200: "#80BFFF",
-  400: "#3399FF",
-  500: "#007FFF",
-  600: "#0072E5",
-  700: "#0059B2",
-};
+import { Box, Typography, styled } from "@mui/material";
 
 const grey = {
   50: "#F3F6F9",
@@ -36,22 +26,19 @@ const InputElement = styled("input")(
   padding: 8px 0px;
   border-radius: 8px;
   text-align: center;
-  color: ${theme.palette.mode === "dark" ? grey[300] : grey[900]};
-  background: ${theme.palette.mode === "dark" ? grey[900] : "#fff"};
-  border: 1px solid ${theme.palette.mode === "dark" ? grey[700] : grey[200]};
-  box-shadow: 0px 2px 4px ${
-    theme.palette.mode === "dark" ? "rgba(0,0,0, 0.5)" : "rgba(0,0,0, 0.05)"
+  color: ${grey[900]};
+  background: #fff;
+  border: 1px solid ${grey[300]};
+  box-shadow: 0px 2px 4px rgba(0,0,0, 0.05);
   };
 
   &:hover {
-    border-color: ${blue[400]};
+    border-color: ${theme.palette.primary.main};
   }
 
   &:focus {
-    border-color: ${blue[400]};
-    box-shadow: 0 0 0 3px ${
-      theme.palette.mode === "dark" ? blue[600] : blue[200]
-    };
+    border-color: ${theme.palette.primary.main};
+    box-shadow: 0 0 0 2px ${theme.palette.secondary.light};
   }
 
   // firefox
@@ -61,7 +48,7 @@ const InputElement = styled("input")(
 `
 );
 
-const OTPInput = ({ separator, length, value, onChange, label }) => {
+const OTPInput = ({ name, separator, length, value, onChange, label }) => {
   const inputRefs = useRef(new Array(length).fill(null));
 
   const focusInput = (targetIndex) => {
@@ -207,7 +194,7 @@ const OTPInput = ({ separator, length, value, onChange, label }) => {
         }}
       >
         {new Array(length).fill(null).map((_, index) => (
-          <Fragment key={index}>
+          <Fragment key={`${name}-fragment-${index}`}>
             <BaseInput
               slots={{
                 input: InputElement,
@@ -235,6 +222,7 @@ const OTPInput = ({ separator, length, value, onChange, label }) => {
 };
 
 OTPInput.propTypes = {
+  name: PropTypes.string.isRequired,
   length: PropTypes.number.isRequired,
   onChange: PropTypes.func.isRequired,
   separator: PropTypes.node,
