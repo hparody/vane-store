@@ -3,7 +3,7 @@ import { SnackbarProvider } from "notistack";
 import CssBaseline from "@mui/material/CssBaseline";
 import GlobalStyles from "@mui/material/GlobalStyles";
 
-import ThemeProvider from "./providers/ThemeProvider";
+import { ProductsProvider, ThemeProvider } from "./providers";
 import Router from "./router/Router";
 
 const App = () => {
@@ -12,7 +12,9 @@ const App = () => {
       <CssBaseline />
       <GlobalStyles styles={{ html: { WebkitFontSmoothing: "auto" } }} />
       <SnackbarProvider autoHideDuration={4000}>
-        <Router />
+        <ProductsProvider>
+          <Router />
+        </ProductsProvider>
       </SnackbarProvider>
     </ThemeProvider>
   );

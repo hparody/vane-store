@@ -3,9 +3,13 @@ import { Box, Grid, Button, Typography } from "@mui/material";
 import AddBoxIcon from "@mui/icons-material/AddBox";
 
 import { ACTION_CREATE, ACTION_EDIT, ACTION_DELETE } from "@/constants/actions";
+import useProducts from "@/hooks/useProducts";
 import ProductForm from "./ProductForm";
+import ProductsTable from "./ProductsTable";
 
 const Products = () => {
+  const { products, loading, fetchProducts } = useProducts();
+
   const [openProductForm, setOpenProductForm] = useState(false);
   const [action, setAction] = useState(ACTION_CREATE);
 
@@ -16,6 +20,14 @@ const Products = () => {
   const handleAddingProduct = () => {
     setAction(ACTION_CREATE);
     handleOpenProductForm(true);
+  };
+
+  const onEditProduct = (productId) => {
+    console.log("Edit", productId);
+  };
+
+  const onDeleteProduct = (productId) => {
+    console.log("Delete", productId);
   };
 
   return (
@@ -36,7 +48,13 @@ const Products = () => {
             Añadir nuevo Producto
           </Button>
         </Grid>
-        <Grid item xs={12}></Grid>
+        <Grid item xs={12}>
+          <ProductsTable
+            products={products}
+            onEditProduct={onEditProduct}
+            onDeleteProduct={onDeleteProduct}
+          />
+        </Grid>
       </Grid>
       <ProductForm
         openForm={openProductForm}
