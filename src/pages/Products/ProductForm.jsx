@@ -73,7 +73,7 @@ const ProductForm = ({
     formTitle = "",
     saveLabel = "",
     cancelLabel = "",
-  } = formOptions[action];
+  } = formOptions[action] || {};
 
   useEffect(() => {
     setValues(product ?? DEFAULT_VALUES);

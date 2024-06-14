@@ -81,6 +81,14 @@ const ProductsTable = ({
       onEdit={onEditProduct}
       onDelete={onDeleteProduct}
       loading={loadingProducts}
+      deleteProps={{
+        dialogId: "id_delete_product_dialog",
+        title: "Eliminar Producto",
+        content:
+          "Una vez eliminado, este producto no podrá ser recuperado. ¿Está seguro de que desea continuar?",
+        confirmText: "Eliminar producto",
+        cancelText: "Cancelar",
+      }}
     />
   );
 };

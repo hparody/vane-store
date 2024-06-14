@@ -31,8 +31,10 @@ const Products = () => {
   };
 
   const onDeleteProduct = (productId) => {
-    console.log("Delete", productId);
     setAction(ACTION_DELETE);
+    console.log("Delete", productId);
+    /** LOGIC TO DELETE */
+    fetchProducts(); // Fetch new products after the deletion
   };
 
   return (
