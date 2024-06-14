@@ -1,21 +1,13 @@
 import PropTypes from "prop-types";
 import { useState, useCallback, useEffect } from "react";
-import {
-  Box,
-  TextField,
-  IconButton,
-  Button,
-  SwipeableDrawer,
-  Typography,
-  Divider,
-} from "@mui/material";
-import CloseIcon from "@mui/icons-material/Close";
+import { Box, TextField, Button } from "@mui/material";
 import SaveIcon from "@mui/icons-material/Save";
 import DisabledByDefaultIcon from "@mui/icons-material/DisabledByDefault";
 import useAlert from "@/hooks/useAlert";
 import PriceInput from "@/components/ui/PriceInput";
 import NumberInput from "@/components/ui/NumberInput";
 import ImageFileUpload from "@/components/ui/ImageFileUpload";
+import Drawer from "@/components/ui/Drawer";
 import { ACTION_CREATE, ACTION_EDIT } from "@/constants/actions";
 
 const defaultEmptyErrorObject = { error: false, message: "" };
@@ -155,137 +147,110 @@ const ProductForm = ({
   };
 
   return (
-    <SwipeableDrawer
+    <Drawer
       anchor="right"
-      open={openForm}
+      title={formTitle}
+      openDrawer={openForm}
       onOpen={onOpenForm}
       onClose={handleClose}
     >
+      <ImageFileUpload
+        name="image"
+        value={values.image}
+        onFileUpload={handleChange}
+        buttonLabel="Adjuntar imagen"
+        alt="Imagen de Producto"
+      />
+      <TextField
+        id="id_name"
+        label="Nombre"
+        placeholder="Nombre"
+        name="name"
+        variant="outlined"
+        type="text"
+        value={values.name}
+        onChange={handleChange}
+        disabled={savingForm}
+        required
+        fullWidth
+        error={errors.name.error}
+        helperText={errors.name.message}
+      />
+      <TextField
+        id="id_description"
+        label="Descripción"
+        placeholder="Descripción"
+        name="description"
+        variant="outlined"
+        type="text"
+        multiline
+        minRows={3}
+        value={values.description}
+        onChange={handleChange}
+        disabled={savingForm}
+        required
+        fullWidth
+        error={errors.description.error}
+        helperText={errors.description.message}
+      />
+      <PriceInput
+        id="id_price"
+        label="Precio"
+        placeholder="Precio"
+        error={errors.price.error}
+        helperText={errors.price.message}
+        name="price"
+        min={0}
+        fullWidth
+        required
+        onChange={handleChange}
+        value={values.price}
+      />
+      <NumberInput
+        id="id_stock"
+        label="Stock"
+        placeholder="Stock"
+        error={errors.stock.error}
+        helperText={errors.stock.message}
+        name="stock"
+        min={0}
+        step={1}
+        fullWidth
+        required
+        onChange={handleChange}
+        value={values.stock}
+      />
       <Box
-        component="form"
+        component="div"
         sx={{
-          width: "25vw",
-          minWidth: "360px",
-          padding: "24px 32px",
           display: "flex",
-          flexDirection: "column",
-          gap: "16px",
+          flexDirection: "row",
+          justifyContent: "flex-end",
+          gap: "8px",
         }}
       >
-        <Box
-          component="div"
-          sx={{
-            display: "flex",
-            flexDirection: "row",
-            justifyContent: "space-between",
-          }}
-        >
-          <Typography variant="h5" fontWeight="bold">
-            {formTitle}
-          </Typography>
-          <IconButton aria-label="close" onClick={handleClose}>
-            <CloseIcon />
-          </IconButton>
-        </Box>
-        <Divider sx={{ mt: "-4px", mb: "8px" }} />
-        <ImageFileUpload
-          name="image"
-          value={values.image}
-          onFileUpload={handleChange}
-          buttonLabel="Adjuntar imagen"
-          alt="Imagen de Producto"
-        />
-        <TextField
-          id="id_name"
-          label="Nombre"
-          placeholder="Nombre"
-          name="name"
+        <Button
+          type="button"
+          color="primary"
           variant="outlined"
-          type="text"
-          value={values.name}
-          onChange={handleChange}
+          onClick={handleClose}
           disabled={savingForm}
-          required
-          fullWidth
-          error={errors.name.error}
-          helperText={errors.name.message}
-        />
-        <TextField
-          id="id_description"
-          label="Descripción"
-          placeholder="Descripción"
-          name="description"
-          variant="outlined"
-          type="text"
-          multiline
-          minRows={3}
-          value={values.description}
-          onChange={handleChange}
-          disabled={savingForm}
-          required
-          fullWidth
-          error={errors.description.error}
-          helperText={errors.description.message}
-        />
-        <PriceInput
-          id="id_price"
-          label="Precio"
-          placeholder="Precio"
-          error={errors.price.error}
-          helperText={errors.price.message}
-          name="price"
-          min={0}
-          fullWidth
-          required
-          onChange={handleChange}
-          value={values.price}
-        />
-        <NumberInput
-          id="id_stock"
-          label="Stock"
-          placeholder="Stock"
-          error={errors.stock.error}
-          helperText={errors.stock.message}
-          name="stock"
-          min={0}
-          step={1}
-          fullWidth
-          required
-          onChange={handleChange}
-          value={values.stock}
-        />
-        <Box
-          component="div"
-          sx={{
-            display: "flex",
-            flexDirection: "row",
-            justifyContent: "flex-end",
-            gap: "8px",
-          }}
+          startIcon={<DisabledByDefaultIcon />}
         >
-          <Button
-            type="button"
-            color="primary"
-            variant="outlined"
-            onClick={handleClose}
-            disabled={savingForm}
-            startIcon={<DisabledByDefaultIcon />}
-          >
-            {cancelLabel}
-          </Button>
-          <Button
-            type="button"
-            color="primary"
-            variant="contained"
-            onClick={handleSubmit}
-            disabled={savingForm}
-            startIcon={<SaveIcon />}
-          >
-            {saveLabel}
-          </Button>
-        </Box>
+          {cancelLabel}
+        </Button>
+        <Button
+          type="button"
+          color="primary"
+          variant="contained"
+          onClick={handleSubmit}
+          disabled={savingForm}
+          startIcon={<SaveIcon />}
+        >
+          {saveLabel}
+        </Button>
       </Box>
-    </SwipeableDrawer>
+    </Drawer>
   );
 };
 
