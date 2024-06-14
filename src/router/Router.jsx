@@ -12,6 +12,8 @@ import LogIn from "@/pages/LogIn";
 import Products from "@/pages/Products";
 import Home from "@/pages/Home";
 
+import ProtectedLogin from "./ProtectedLogin";
+
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Fragment>
@@ -21,7 +23,14 @@ const router = createBrowserRouter(
         <Route path="*" element={<NotFoundPage />} />
       </Route>
 
-      <Route path="/login" element={<LogIn />} />
+      <Route
+        path="/login"
+        element={
+          <ProtectedLogin>
+            <LogIn />
+          </ProtectedLogin>
+        }
+      />
     </Fragment>
   )
 );
