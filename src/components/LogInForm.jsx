@@ -43,7 +43,6 @@ const LogInForm = ({ onLogInSuccessful = () => {}, allowSignUp = false }) => {
   /** Validate OTP Value */
   useEffect(() => {
     if (otpValue.length === OTP_CODE_LENGTH) {
-      console.log("validating otp code", otpValue);
       /** INSERT LOGIC FOR OTP CODE VALIDATION */
       if (otpValue === "111111") {
         login();
