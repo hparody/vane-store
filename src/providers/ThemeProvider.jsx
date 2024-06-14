@@ -4,33 +4,39 @@ import {
   ThemeProvider as MuiThemeProvider,
   responsiveFontSizes,
 } from "@mui/material/styles";
+import { esES } from "@mui/x-data-grid/locales";
+import { esES as coreesES } from "@mui/material/locale";
 
-let theme = createTheme({
-  palette: {
-    primary: {
-      main: "#0D0D0D",
+let theme = createTheme(
+  {
+    palette: {
+      primary: {
+        main: "#0D0D0D",
+      },
+      secondary: {
+        main: "#BFBFBF",
+      },
+      mode: "light",
     },
-    secondary: {
-      main: "#BFBFBF",
+    typography: {
+      fontFamily: [
+        "Inter, sans-serif",
+        "BlinkMacSystemFont",
+        '"Segoe UI"',
+        "Roboto",
+        '"Helvetica Neue"',
+        "Arial",
+        "sans-serif",
+        '"Apple Color Emoji"',
+        '"Segoe UI Emoji"',
+        '"Segoe UI Symbol"',
+      ].join(","),
     },
-    mode: "light",
   },
-  typography: {
-    fontFamily: [
-      "Inter, sans-serif",
-      "BlinkMacSystemFont",
-      '"Segoe UI"',
-      "Roboto",
-      '"Helvetica Neue"',
-      "Arial",
-      "sans-serif",
-      '"Apple Color Emoji"',
-      '"Segoe UI Emoji"',
-      '"Segoe UI Symbol"',
-    ].join(","),
-  },
-});
-theme = responsiveFontSizes(theme);
+  esES, // x-data-grid translations
+  coreesES // mui translations
+);
+
 theme = createTheme(theme, {
   // Custom colors created with augmentColor go here
   palette: {
@@ -54,6 +60,8 @@ theme = createTheme(theme, {
     }),
   },
 });
+
+theme = responsiveFontSizes(theme);
 
 const ThemeProvider = ({ children }) => (
   <MuiThemeProvider theme={theme}>{children}</MuiThemeProvider>
