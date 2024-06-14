@@ -4,6 +4,8 @@ import { AppBar, Avatar, Toolbar, Divider } from "@mui/material";
 import Logo from "@/assets/vane-store.png";
 import NavLink from "./NavLink";
 import { useNavigate } from "react-router-dom";
+import useAuth from "@/hooks/useAuth";
+import { useMemo } from "react";
 
 const LogoImg = styled.img`
   aspect-ratio: inherit;
@@ -17,6 +19,14 @@ const LogoImg = styled.img`
 
 const NavBar = () => {
   const navigate = useNavigate();
+  const { user, isAdmin, isLoggedIn } = useAuth();
+
+  const userInitial = useMemo(() => {
+    if (isLoggedIn) {
+      return user.username.charAt(0).toUpperCase();
+    }
+  }, [user, isLoggedIn]);
+
   return (
     <AppBar
       component="nav"
@@ -43,10 +53,12 @@ const NavBar = () => {
           onClick={() => navigate("/")}
         />
         <Divider orientation="vertical" variant="middle" flexItem />
-        <NavLink to="/admin/products" sx={{ marginRight: "auto" }}>
-          Productos
-        </NavLink>
-        <Avatar sx={{}}>H</Avatar>
+        {isAdmin && (
+          <NavLink to="/admin/products" sx={{ marginRight: "auto" }}>
+            Productos
+          </NavLink>
+        )}
+        {isLoggedIn && <Avatar>{userInitial}</Avatar>}
       </Toolbar>
     </AppBar>
   );
