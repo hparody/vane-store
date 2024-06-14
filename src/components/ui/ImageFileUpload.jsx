@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { Button, Card, CardContent, styled } from "@mui/material";
 import FileUploadIcon from "@mui/icons-material/FileUpload";
@@ -20,7 +20,7 @@ const VisuallyHiddenInput = styled("input")({
 const Image = styled("img")`
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
 `;
 
 const ImageFileUpload = ({
@@ -34,33 +34,35 @@ const ImageFileUpload = ({
   const [selectedImage, setSelectedImage] = useState(value);
 
   useEffect(() => {
-    if (onFileUpload) onFileUpload({ name, value: selectedImage });
-  }, [name, selectedImage, onFileUpload]);
-
-  useEffect(() => {
     if (value === "") {
       setInputValue("");
       setSelectedImage("");
+    } else {
+      setSelectedImage(value);
     }
   }, [value]);
 
-  const handleUpload = (event) => {
-    event.preventDefault();
-    setInputValue(event.target.value);
-    const file = event.target.files[0];
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onloadend = (e) => {
-      setSelectedImage(reader.result);
-    };
-  };
+  const handleUpload = useCallback(
+    (event) => {
+      event.preventDefault();
+      setInputValue(event.target.value);
+      const file = event.target.files[0];
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onloadend = (e) => {
+        setSelectedImage(reader.result);
+        onFileUpload({ name, value: reader.result });
+      };
+    },
+    [name, onFileUpload]
+  );
 
   return (
     <Card
       variant="outlined"
       sx={{
-        maxWidth: "200px",
         height: "200px",
+        width: "200px",
         display: "flex",
         alignSelf: "center",
       }}
@@ -69,6 +71,8 @@ const ImageFileUpload = ({
         sx={{
           padding: "0px !important",
           position: "relative",
+          width: "100%",
+          height: "100%",
         }}
       >
         <Button
@@ -101,6 +105,7 @@ const ImageFileUpload = ({
         <Image
           src={selectedImage === "" ? DefaultImage : selectedImage}
           alt={alt}
+          loading="lazy"
         />
       </CardContent>
     </Card>

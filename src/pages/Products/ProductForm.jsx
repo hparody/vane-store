@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import {
   Box,
   TextField,
@@ -25,15 +25,17 @@ const formOptions = {
     formTitle: "Añadir nuevo producto",
     saveLabel: "Guardar",
     cancelLabel: "Cancelar",
+    confirmationMessage: "Producto creado exitosamente",
   },
   [ACTION_EDIT]: {
     formTitle: "Editar producto",
     saveLabel: "Actualizar",
     cancelLabel: "Cancelar",
+    confirmationMessage: "Producto actualizado correctamente",
   },
 };
 
-const defaultValues = {
+const DEFAULT_VALUES = {
   name: "",
   description: "",
   price: null,
@@ -41,7 +43,7 @@ const defaultValues = {
   image: "",
 };
 
-const defaultErorrs = {
+const DEFAULT_ERRORS = {
   name: defaultEmptyErrorObject,
   description: defaultEmptyErrorObject,
   price: defaultEmptyErrorObject,
@@ -61,10 +63,11 @@ const ProductForm = ({
   onOpenForm,
   onCloseForm,
   action = ACTION_CREATE,
+  product = DEFAULT_VALUES,
 }) => {
   const { triggerAlert } = useAlert();
-  const [values, setValues] = useState(defaultValues);
-  const [errors, setErrors] = useState(defaultErorrs);
+  const [values, setValues] = useState(product ?? DEFAULT_VALUES);
+  const [errors, setErrors] = useState(DEFAULT_ERRORS);
   const [savingForm, setSavingForm] = useState(false);
   const {
     formTitle = "",
@@ -72,11 +75,15 @@ const ProductForm = ({
     cancelLabel = "",
   } = formOptions[action];
 
-  const cleanValues = () => setValues(defaultValues);
-  const cleanErorrs = () => setErrors(defaultErorrs);
+  useEffect(() => {
+    setValues(product ?? DEFAULT_VALUES);
+  }, [product]);
+
+  const cleanValues = () => setValues(DEFAULT_VALUES);
+  const cleanErorrs = () => setErrors(DEFAULT_ERRORS);
 
   const isFieldValid = (fieldName, fieldValue) => {
-    if (fieldName === "image") return;
+    if (fieldName === "image") return true;
     let hasError = false;
     if (fieldValue === undefined || fieldValue === null || fieldValue === "") {
       hasError = true;
@@ -128,6 +135,10 @@ const ProductForm = ({
     if (areAllFieldsValid()) {
       setSavingForm(true);
       /** INSERT LOGIC FOR SAVE PRODUCT HERE */
+      triggerAlert({
+        type: "success",
+        message: formOptions[action].confirmationMessage,
+      });
       setSavingForm(false);
     } else {
       triggerAlert({
@@ -183,7 +194,7 @@ const ProductForm = ({
           onFileUpload={handleChange}
           buttonLabel="Adjuntar imagen"
           alt="Imagen de Producto"
-        ></ImageFileUpload>
+        />
         <TextField
           id="id_name"
           label="Nombre"
@@ -283,6 +294,14 @@ ProductForm.propTypes = {
   onOpenForm: PropTypes.func.isRequired,
   onCloseForm: PropTypes.func.isRequired,
   action: PropTypes.string.isRequired,
+  product: PropTypes.shape({
+    id: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,
+    description: PropTypes.string.isRequired,
+    price: PropTypes.number.isRequired,
+    stock: PropTypes.number.isRequired,
+    image: PropTypes.string.isRequired,
+  }),
 };
 
 export default ProductForm;

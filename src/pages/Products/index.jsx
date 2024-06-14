@@ -8,7 +8,8 @@ import ProductForm from "./ProductForm";
 import ProductsTable from "./ProductsTable";
 
 const Products = () => {
-  const { products, loading, fetchProducts } = useProducts();
+  const { products, loading, fetchProducts, getProduct } = useProducts();
+  const [selectedProduct, setSelectedProduct] = useState(null);
 
   const [openProductForm, setOpenProductForm] = useState(false);
   const [action, setAction] = useState(ACTION_CREATE);
@@ -23,8 +24,10 @@ const Products = () => {
   };
 
   const onEditProduct = (productId) => {
-    console.log("Edit", productId);
+    console.log("Edit", getProduct(productId));
     setAction(ACTION_EDIT);
+    setSelectedProduct(getProduct(productId));
+    handleOpenProductForm(true);
   };
 
   const onDeleteProduct = (productId) => {
@@ -64,6 +67,7 @@ const Products = () => {
         action={action}
         onOpenForm={() => handleOpenProductForm(true)}
         onCloseForm={() => handleOpenProductForm(false)}
+        product={selectedProduct}
       />
     </Box>
   );
