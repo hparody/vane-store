@@ -1,6 +1,6 @@
 import { createContext } from "react";
 
-const initialProductsState = {
+const initialProducts = {
   products: null,
   fetchProducts: null,
   getProduct: null,
@@ -8,9 +8,9 @@ const initialProductsState = {
   error: false,
 };
 
-const ProductsContext = createContext(initialProductsState);
+const ProductsContext = createContext(initialProducts);
 
-const initialAuthState = {
+const initialAuth = {
   user: null,
   error: false,
   isAdmin: false,
@@ -20,6 +20,13 @@ const initialAuthState = {
   logout: null,
 };
 
-const AuthContext = createContext(initialAuthState);
+const AuthContext = createContext(initialAuth);
 
-export { AuthContext, ProductsContext };
+const initialShoppingCart = {
+  cartProducts: [],
+  totalProducts: 0,
+};
+
+const ShoppingCartContext = createContext(initialShoppingCart);
+
+export { AuthContext, ProductsContext, ShoppingCartContext };

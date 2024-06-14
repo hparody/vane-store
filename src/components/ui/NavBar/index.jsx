@@ -8,6 +8,7 @@ import Logo from "@/assets/vane-store.png";
 import useAuth from "@/hooks/useAuth";
 
 import NavLink from "./NavLink";
+import ShoppingCart from "./ShoppingCart";
 
 const LogoImg = styled.img`
   aspect-ratio: inherit;
@@ -68,6 +69,7 @@ const NavBar = () => {
               Iniciar Sesión
             </Button>
           )}
+          <ShoppingCart sx={{ marginRight: "10px" }} />
           {isLoggedIn && <Avatar>{userInitial}</Avatar>}
         </Box>
       </Toolbar>
