@@ -52,6 +52,7 @@ const NavBar = () => {
         <LogoImg
           src={Logo}
           alt="Vane Store logo"
+          loading="lazy"
           onClick={() => navigate("/")}
         />
         <Divider orientation="vertical" variant="middle" flexItem />

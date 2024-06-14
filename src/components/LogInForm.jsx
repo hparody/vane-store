@@ -133,7 +133,7 @@ const LogInForm = ({ onLogInSuccessful = () => {}, allowSignUp = false }) => {
         }}
         onSubmit={handleSubmit}
       >
-        <LogoImg src={Logo} alt="Vane Store Logo" />
+        <LogoImg src={Logo} alt="Vane Store Logo" loading="lazy" />
         <TextField
           id="id_login_username"
           label="Usuario"
