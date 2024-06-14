@@ -1,11 +1,13 @@
+import { useMemo } from "react";
+import { useNavigate } from "react-router-dom";
 import styled from "@emotion/styled";
-import { AppBar, Avatar, Toolbar, Divider } from "@mui/material";
+import { AppBar, Avatar, Toolbar, Divider, Box, Button } from "@mui/material";
+import PersonIcon from "@mui/icons-material/Person";
 
 import Logo from "@/assets/vane-store.png";
-import NavLink from "./NavLink";
-import { useNavigate } from "react-router-dom";
 import useAuth from "@/hooks/useAuth";
-import { useMemo } from "react";
+
+import NavLink from "./NavLink";
 
 const LogoImg = styled.img`
   aspect-ratio: inherit;
@@ -23,7 +25,7 @@ const NavBar = () => {
 
   const userInitial = useMemo(() => {
     if (isLoggedIn) {
-      return user.username.charAt(0).toUpperCase();
+      return user.name.charAt(0).toUpperCase();
     }
   }, [user, isLoggedIn]);
 
@@ -44,7 +46,7 @@ const NavBar = () => {
         sx={{
           display: "flex",
           alignItems: "center",
-          justifyContent: "space-between",
+          justifyContent: "flex-start",
         }}
       >
         <LogoImg
@@ -53,12 +55,20 @@ const NavBar = () => {
           onClick={() => navigate("/")}
         />
         <Divider orientation="vertical" variant="middle" flexItem />
-        {isAdmin && (
-          <NavLink to="/admin/products" sx={{ marginRight: "auto" }}>
-            Productos
-          </NavLink>
-        )}
-        {isLoggedIn && <Avatar>{userInitial}</Avatar>}
+        {isAdmin && <NavLink to="/admin/products">Productos</NavLink>}
+        <Box sx={{ marginLeft: "auto", display: "flex", flexDirection: "row" }}>
+          {!isAdmin && (
+            <Button
+              variant="outlined"
+              size="small"
+              startIcon={<PersonIcon />}
+              sx={{ padding: "5px 20px" }}
+            >
+              Iniciar Sesión
+            </Button>
+          )}
+          {isLoggedIn && <Avatar>{userInitial}</Avatar>}
+        </Box>
       </Toolbar>
     </AppBar>
   );

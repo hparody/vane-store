@@ -8,7 +8,7 @@ import { isUserLoggedIn, isAdminRole } from "@/utils/user";
 
 const DUMMY_USER = {
   username: "hemelparody@hotmail.com",
-  name: "Parody",
+  name: "Hemel Parody",
   role: "admin",
   token: "123456",
   passwordCorrect: true,
