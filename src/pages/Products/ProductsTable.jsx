@@ -34,7 +34,7 @@ const ProductsTable = ({
       display: "flex",
       description: "Imagen del producto",
       renderCell: (params) => (
-        <Avatar alt={params.name} src={params.image} variant="rounded" />
+        <Avatar alt={params.name} src={params.value} variant="rounded" />
       ),
     },
     {
