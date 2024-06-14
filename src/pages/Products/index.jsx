@@ -24,10 +24,12 @@ const Products = () => {
 
   const onEditProduct = (productId) => {
     console.log("Edit", productId);
+    setAction(ACTION_EDIT);
   };
 
   const onDeleteProduct = (productId) => {
     console.log("Delete", productId);
+    setAction(ACTION_DELETE);
   };
 
   return (
@@ -51,6 +53,7 @@ const Products = () => {
         <Grid item xs={12}>
           <ProductsTable
             products={products}
+            loadingProducts={loading}
             onEditProduct={onEditProduct}
             onDeleteProduct={onDeleteProduct}
           />

@@ -18,7 +18,12 @@ const parseProducts = (products) => {
   );
 };
 
-const ProductsTable = ({ products, onEditProduct, onDeleteProduct }) => {
+const ProductsTable = ({
+  products,
+  loadingProducts = false,
+  onEditProduct,
+  onDeleteProduct,
+}) => {
   const tableRows = useMemo(() => parseProducts(products), [products]);
 
   const tableColumns = [
@@ -27,21 +32,31 @@ const ProductsTable = ({ products, onEditProduct, onDeleteProduct }) => {
       field: "image",
       headerName: "Imagen",
       display: "flex",
+      description: "Imagen del producto",
       renderCell: (params) => (
         <Avatar alt={params.name} src={params.image} variant="rounded" />
       ),
     },
-    { field: "name", type: "string", headerName: "Nombre" },
+    {
+      field: "name",
+      type: "string",
+      headerName: "Nombre",
+      description:
+        "Nombre descriptivo y específico del producto, tal como aparece en su registro oficial.",
+    },
     {
       field: "description",
       type: "string",
       headerName: "Descripción",
+      description:
+        "Una breve descripción del producto, sus características, modo de uso y cuidados del mismo.",
       flex: 1,
     },
     {
       field: "price",
       type: "number",
       headerName: "Precio",
+      description: "Precio incluyendo impuestos",
       valueFormatter: (value) => {
         if (value == null) {
           return "";
@@ -49,7 +64,12 @@ const ProductsTable = ({ products, onEditProduct, onDeleteProduct }) => {
         return `$ ${value.toLocaleString()}`;
       },
     },
-    { field: "stock", type: "number", headerName: "Stock" },
+    {
+      field: "stock",
+      type: "number",
+      headerName: "Stock",
+      description: "Cantidad de items disponibles de este producto.",
+    },
   ];
 
   return (
@@ -60,6 +80,7 @@ const ProductsTable = ({ products, onEditProduct, onDeleteProduct }) => {
       includeActions
       onEdit={onEditProduct}
       onDelete={onDeleteProduct}
+      loading={loadingProducts}
     />
   );
 };
@@ -75,6 +96,7 @@ ProductsTable.propTypes = {
       image: PropTypes.string.isRequired,
     })
   ).isRequired,
+  loadingProducts: PropTypes.bool,
   onEditProduct: PropTypes.func.isRequired,
   onDeleteProduct: PropTypes.func.isRequired,
 };

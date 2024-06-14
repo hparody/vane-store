@@ -34,7 +34,7 @@ const ProductsProvider = ({ children }) => {
 
   const contextValue = useMemo(
     () => ({ products, fetchProducts, getProduct, loading, error }),
-    [error, fetchProducts, loading, products]
+    [error, fetchProducts, getProduct, loading, products]
   );
 
   return (

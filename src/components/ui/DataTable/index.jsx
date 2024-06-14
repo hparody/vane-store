@@ -60,6 +60,7 @@ const DataTable = ({
         outliersFactor: 1,
         expand: true,
       }}
+      pageSizeOptions={[10, 20, 50, 100]}
       {...props}
     />
   );

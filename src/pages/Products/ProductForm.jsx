@@ -16,7 +16,7 @@ import useAlert from "@/hooks/useAlert";
 import PriceInput from "@/components/ui/PriceInput";
 import NumberInput from "@/components/ui/NumberInput";
 import ImageFileUpload from "@/components/ui/ImageFileUpload";
-import { ACTION_CREATE, ACTION_EDIT, ACTION_DELETE } from "@/constants/actions";
+import { ACTION_CREATE, ACTION_EDIT } from "@/constants/actions";
 
 const defaultEmptyErrorObject = { error: false, message: "" };
 
