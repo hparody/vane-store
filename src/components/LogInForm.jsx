@@ -11,6 +11,7 @@ import isValidEmail from "@/utils/isValidEmail";
 import useAlert from "@/hooks/useAlert";
 import PasswordInput from "./ui/PasswordInput";
 import OTPInput from "./ui/OTPInput.jsx";
+import useAuth from "@/hooks/useAuth";
 
 const LogoImg = styled.img`
   aspect-ratio: inherit;
@@ -28,6 +29,7 @@ const OTP_CODE_LENGTH = 6;
 
 const LogInForm = ({ onLogInSuccessful = () => {}, allowSignUp = false }) => {
   const { triggerAlert } = useAlert();
+  const { user, login } = useAuth();
 
   const [values, setValues] = useState({ username: "", password: "" });
   const [errors, setErrors] = useState({
@@ -44,13 +46,7 @@ const LogInForm = ({ onLogInSuccessful = () => {}, allowSignUp = false }) => {
       console.log("validating otp code", otpValue);
       /** INSERT LOGIC FOR OTP CODE VALIDATION */
       if (otpValue === "111111") {
-        setShowOtpValidation(false);
-        setLogginIn(false);
-        triggerAlert({
-          message: "Inicio de sesión exitoso.",
-          type: "success",
-        });
-        onLogInSuccessful();
+        login();
       } else {
         triggerAlert({
           message: "El código de verificación es incorrecto",
@@ -58,7 +54,23 @@ const LogInForm = ({ onLogInSuccessful = () => {}, allowSignUp = false }) => {
         });
       }
     }
-  }, [otpValue, onLogInSuccessful, triggerAlert]);
+  }, [otpValue, onLogInSuccessful, triggerAlert, login]);
+
+  const logInUser = useCallback(() => {
+    setShowOtpValidation(false);
+    setLogginIn(false);
+    triggerAlert({
+      message: "Inicio de sesión exitoso.",
+      type: "success",
+    });
+    onLogInSuccessful();
+  }, [onLogInSuccessful, triggerAlert]);
+
+  useEffect(() => {
+    if (user?.token) {
+      logInUser();
+    }
+  }, [logInUser, user]);
 
   const areFieldsValid = useCallback(() => {
     return (

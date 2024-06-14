@@ -6,6 +6,14 @@ import useApi from "@/hooks/useApi";
 import useLocalStorage from "@/hooks/useLocalStorage";
 import { isUserLoggedIn, isAdminRole } from "@/utils/user";
 
+const DUMMY_USER = {
+  username: "hemelparody@hotmail.com",
+  name: "Hemel Parody",
+  role: "admin",
+  token: "123456",
+  passwordCorrect: true,
+};
+
 const AuthProvider = ({ children }) => {
   const [user, setUser] = useLocalStorage("user", null);
   const { getRequest, postRequest, loading, error } = useApi();
@@ -30,6 +38,22 @@ const AuthProvider = ({ children }) => {
 
   const isAdmin = useMemo(() => isAdminRole(user), [user]);
 
+  const checkPassword = useCallback(
+    async (username, password) => {
+      try {
+        const response = await postRequest("/api/check-password", {
+          username,
+          password,
+        });
+        setUser(response.data);
+      } catch (error) {
+        setUser(DUMMY_USER); // SET DUMMY USER
+        console.error(error);
+      }
+    },
+    [postRequest, setUser]
+  );
+
   const login = useCallback(
     async (username, password) => {
       try {
@@ -39,6 +63,7 @@ const AuthProvider = ({ children }) => {
         });
         setUser(response.data);
       } catch (error) {
+        setUser(DUMMY_USER); // SET DUMMY USER
         console.error(error);
       }
     },
@@ -50,6 +75,7 @@ const AuthProvider = ({ children }) => {
       await postRequest("/api/logout", {}, { withCredentials: true });
       setUser(null);
     } catch (error) {
+      setUser(null); // DUMMY LOGOUT
       console.error(error);
     }
   }, [postRequest, setUser]);
