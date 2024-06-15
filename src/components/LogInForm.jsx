@@ -107,7 +107,8 @@ const LogInForm = ({ onLogInSuccessful = () => {}, allowSignUp = false }) => {
     [values, validateField]
   );
 
-  const handleSubmit = () => {
+  const handleSubmit = (event) => {
+    event.preventDefault();
     if (areFieldsValid()) {
       setLogginIn(true);
       /** INSERT LOGIC FOR LOG IN */
