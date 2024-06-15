@@ -15,6 +15,8 @@ import {
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
 import useShoppingCart from "@/hooks/useShoppingCart";
 
+import DefaultProductImage from "@/assets/default-image.jpg";
+
 const LoadingProductsSkeleton = () => {
   return (
     <Grid container spacing={2}>
@@ -87,7 +89,7 @@ const Home = () => {
             <CardMedia
               component="img"
               alt={product.name}
-              image={product.image}
+              image={product.image === "" ? DefaultProductImage : product.image}
               loading="lazy"
               sx={{ height: "65%", transition: "all ease-in-out 500ms" }}
             />
