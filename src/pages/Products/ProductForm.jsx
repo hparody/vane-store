@@ -9,6 +9,7 @@ import NumberInput from "@/components/ui/NumberInput";
 import ImageFileUpload from "@/components/ui/ImageFileUpload";
 import Drawer from "@/components/ui/Drawer";
 import { ACTION_CREATE, ACTION_EDIT } from "@/constants/actions";
+import useProducts from "@/hooks/useProducts";
 
 const defaultEmptyErrorObject = { error: false, message: "" };
 
@@ -58,6 +59,8 @@ const ProductForm = ({
   product = DEFAULT_VALUES,
 }) => {
   const { triggerAlert } = useAlert();
+  const { createProduct } = useProducts();
+
   const [values, setValues] = useState(product ?? DEFAULT_VALUES);
   const [errors, setErrors] = useState(DEFAULT_ERRORS);
   const [savingForm, setSavingForm] = useState(false);
@@ -126,11 +129,20 @@ const ProductForm = ({
   const handleSubmit = () => {
     if (areAllFieldsValid()) {
       setSavingForm(true);
-      /** INSERT LOGIC FOR SAVE PRODUCT HERE */
-      triggerAlert({
-        type: "success",
-        message: formOptions[action].confirmationMessage,
-      });
+      const { error, response } = createProduct(values);
+      if (!error) {
+        triggerAlert({
+          type: "success",
+          message: formOptions[action].confirmationMessage,
+        });
+        handleClose();
+      } else {
+        triggerAlert({
+          type: "error",
+          message:
+            "Ocurrió un error al crear el producto. Por favor, intente de nuevo más tarde.",
+        });
+      }
       setSavingForm(false);
     } else {
       triggerAlert({

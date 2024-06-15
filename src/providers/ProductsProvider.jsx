@@ -3,11 +3,13 @@ import { useMemo, useCallback, useState, useEffect } from "react";
 
 import { ProductsContext } from "@/contexts";
 import useApi from "@/hooks/useApi";
+import useHttpAdapter from "@/hooks/useHttpAdapter";
 
 import dummyProducts from "@/mocks/products.json";
 
 const ProductsProvider = ({ children }) => {
-  const { getRequest, loading, error } = useApi();
+  const { getRequest, postRequest, loading, error } = useApi();
+  const { postRequest: postHttp } = useHttpAdapter();
   const [products, setProducts] = useState([]);
 
   const fetchProducts = useCallback(async () => {
@@ -27,14 +29,56 @@ const ProductsProvider = ({ children }) => {
     [products]
   );
 
+  const createProduct = useCallback(
+    async (productInfo) => {
+      try {
+        const response = await postRequest("/create/product");
+        return { error: false, data: response };
+      } catch (err) {
+        console.error("Error cre products:", err);
+        return { error: true, data: err };
+      }
+    },
+    [postRequest]
+  );
+
+  const updateProduct = useCallback(
+    async (productInfo) => {
+      try {
+        const response = await postHttp("/productos/actualizar");
+        return { error: false, data: response };
+      } catch (err) {
+        console.error("Error cre products:", err);
+        return { error: true, data: err };
+      }
+    },
+    [postHttp]
+  );
+
   useEffect(() => {
     fetchProducts();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const contextValue = useMemo(
-    () => ({ products, fetchProducts, getProduct, loading, error }),
-    [error, fetchProducts, getProduct, loading, products]
+    () => ({
+      products,
+      createProduct,
+      updateProduct,
+      fetchProducts,
+      getProduct,
+      loading,
+      error,
+    }),
+    [
+      createProduct,
+      error,
+      fetchProducts,
+      getProduct,
+      loading,
+      products,
+      updateProduct,
+    ]
   );
 
   return (

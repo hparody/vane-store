@@ -52,7 +52,6 @@ const LogInForm = ({ onLogInSuccessful = () => {}, allowSignUp = false }) => {
   /** Validate OTP Value */
   useEffect(() => {
     if (otpValue.length === OTP_CODE_LENGTH) {
-      /** INSERT LOGIC FOR OTP CODE VALIDATION */
       if (otpValue === "111111") {
         logInUser();
       } else {
@@ -62,7 +61,7 @@ const LogInForm = ({ onLogInSuccessful = () => {}, allowSignUp = false }) => {
         });
       }
     }
-  }, [otpValue, onLogInSuccessful, triggerAlert, login, logInUser]);
+  }, [otpValue, onLogInSuccessful, triggerAlert, logInUser]);
 
   const validateField = useCallback(
     (fieldName, fieldValue) => {
@@ -101,7 +100,8 @@ const LogInForm = ({ onLogInSuccessful = () => {}, allowSignUp = false }) => {
     [values, validateField]
   );
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (event) => {
+    event.preventDefault();
     if (areFieldsValid()) {
       setLogginIn(true);
       /** INSERT LOGIC FOR LOG IN */
@@ -179,7 +179,7 @@ const LogInForm = ({ onLogInSuccessful = () => {}, allowSignUp = false }) => {
         Olvidé mi contraseña
       </Link>
       <Button
-        type="button"
+        type="submit"
         color="primary"
         variant="contained"
         onClick={handleSubmit}

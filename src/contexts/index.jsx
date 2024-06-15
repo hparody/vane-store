@@ -3,6 +3,8 @@ import { createContext } from "react";
 const initialProducts = {
   products: null,
   fetchProducts: null,
+  createProduct: null,
+  updateProduct: null,
   getProduct: null,
   loading: false,
   error: false,
