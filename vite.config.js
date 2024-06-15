@@ -25,15 +25,5 @@ export default defineConfig(({ mode }) => {
         "@": "/src",
       },
     },
-    server: {
-      proxy: {
-        "/api-rest": {
-          target: "http://localhost:8081",
-          changeOrigin: true,
-          rewrite: (path) => path.replace(/^\/api-rest/, ""),
-          secure: false,
-        },
-      },
-    },
   };
 });
