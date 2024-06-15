@@ -6,7 +6,6 @@ import PersonIcon from "@mui/icons-material/Person";
 import styled from "@emotion/styled";
 
 import Logo from "@/assets/vane-store.png";
-import PaperContainer from "./ui/PaperContainer";
 import isValidEmail from "@/utils/isValidEmail";
 import useAlert from "@/hooks/useAlert";
 import PasswordInput from "./ui/PasswordInput";
@@ -121,90 +120,88 @@ const LogInForm = ({ onLogInSuccessful = () => {}, allowSignUp = false }) => {
   };
 
   return (
-    <PaperContainer variant="elevation" elevation={3} square={false}>
-      <Box
-        component="form"
-        sx={{
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "center",
-          alignContent: "center",
-          gap: "16px",
+    <Box
+      component="form"
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+        alignContent: "center",
+        gap: "16px",
+      }}
+      onSubmit={handleSubmit}
+    >
+      <LogoImg src={Logo} alt="Vane Store Logo" loading="lazy" />
+      <TextField
+        id="id_login_username"
+        label="Usuario"
+        placeholder="Usuario"
+        name="username"
+        variant="outlined"
+        type="email"
+        value={values.username}
+        onChange={handleChange}
+        disabled={logginIn}
+        required
+        error={errors.username.error}
+        helperText={errors.username.message}
+        InputProps={{
+          startAdornment: (
+            <InputAdornment position="start">
+              <PersonIcon aria-label="user icon" fontSize="small" />
+            </InputAdornment>
+          ),
         }}
-        onSubmit={handleSubmit}
+      />
+      <PasswordInput
+        id="id_login_password"
+        label="Contraseña"
+        placeholder="Contraseña"
+        name="password"
+        variant="outlined"
+        value={values.password}
+        disabled={logginIn}
+        required
+        error={errors.password.error}
+        helperText={errors.password.message}
+        onChange={handleChange}
+      />
+      <Link href="#" fontSize="small" sx={{ margin: "-5px 0px" }}>
+        Olvidé mi contraseña
+      </Link>
+      <Button
+        type="submit"
+        color="primary"
+        variant="contained"
+        onClick={handleSubmit}
+        disabled={logginIn}
       >
-        <LogoImg src={Logo} alt="Vane Store Logo" loading="lazy" />
-        <TextField
-          id="id_login_username"
-          label="Usuario"
-          placeholder="Usuario"
-          name="username"
-          variant="outlined"
-          type="email"
-          value={values.username}
-          onChange={handleChange}
-          disabled={logginIn}
-          required
-          error={errors.username.error}
-          helperText={errors.username.message}
-          InputProps={{
-            startAdornment: (
-              <InputAdornment position="start">
-                <PersonIcon aria-label="user icon" fontSize="small" />
-              </InputAdornment>
-            ),
-          }}
-        />
-        <PasswordInput
-          id="id_login_password"
-          label="Contraseña"
-          placeholder="Contraseña"
-          name="password"
-          variant="outlined"
-          value={values.password}
-          disabled={logginIn}
-          required
-          error={errors.password.error}
-          helperText={errors.password.message}
-          onChange={handleChange}
-        />
-        <Link href="#" fontSize="small" sx={{ margin: "-5px 0px" }}>
-          Olvidé mi contraseña
-        </Link>
+        Iniciar Sesión
+      </Button>
+      {allowSignUp && (
         <Button
-          type="submit"
-          color="primary"
-          variant="contained"
-          onClick={handleSubmit}
+          type="button"
+          variant="outlined"
           disabled={logginIn}
+          sx={{ marginTop: "-5px" }}
         >
-          Iniciar Sesión
+          Registrarme
         </Button>
-        {allowSignUp && (
-          <Button
-            type="button"
-            variant="outlined"
-            disabled={logginIn}
-            sx={{ marginTop: "-5px" }}
-          >
-            Registrarme
-          </Button>
-        )}
-        {showOtpValidation && (
-          <Fragment>
-            <Divider sx={{ margin: "10px 0px" }} />
-            <OTPInput
-              name="otp-input"
-              separator={<span>-</span>}
-              value={otpValue}
-              onChange={setOtpValue}
-              length={OTP_CODE_LENGTH}
-              label="Digita el código enviado a tu correo para confirmar tu inicio de sesión."
-            />
-          </Fragment>
-        )}
-      </Box>
-    </PaperContainer>
+      )}
+      {showOtpValidation && (
+        <Fragment>
+          <Divider sx={{ margin: "10px 0px" }} />
+          <OTPInput
+            name="otp-input"
+            separator={<span>-</span>}
+            value={otpValue}
+            onChange={setOtpValue}
+            length={OTP_CODE_LENGTH}
+            label="Digita el código enviado a tu correo para confirmar tu inicio de sesión."
+          />
+        </Fragment>
+      )}
+    </Box>
   );
 };
 

@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 
 import Background from "../../components/ui/Background";
 import LogInForm from "@/components/LogInForm";
+import PaperContainer from "@/components/ui/PaperContainer";
 
 const LogIn = () => {
   const navigate = useNavigate();
@@ -20,7 +21,9 @@ const LogIn = () => {
           height: "100%",
         }}
       >
-        <LogInForm onLogInSuccessful={() => navigate("/admin/products")} />
+        <PaperContainer variant="elevation" elevation={3} square={false}>
+          <LogInForm onLogInSuccessful={() => navigate("/admin/products")} />
+        </PaperContainer>
       </Box>
     </Background>
   );

@@ -11,7 +11,6 @@ const DUMMY_USER = {
   name: "Hemel Parody",
   role: "admin",
   token: "123456",
-  passwordCorrect: true,
 };
 
 const AuthProvider = ({ children }) => {
@@ -37,22 +36,6 @@ const AuthProvider = ({ children }) => {
   const isLoggedIn = useMemo(() => isUserLoggedIn(user), [user]);
 
   const isAdmin = useMemo(() => isAdminRole(user), [user]);
-
-  const checkPassword = useCallback(
-    async (username, password) => {
-      try {
-        const response = await postRequest("/api/check-password", {
-          username,
-          password,
-        });
-        setUser(response.data);
-      } catch (error) {
-        setUser(DUMMY_USER); // SET DUMMY USER
-        console.error(error);
-      }
-    },
-    [postRequest, setUser]
-  );
 
   const login = useCallback(
     async (username, password) => {
