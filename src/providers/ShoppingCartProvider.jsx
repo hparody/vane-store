@@ -36,6 +36,10 @@ const ShoppingCartProvider = ({ children }) => {
       removeProductFromCart,
       cartProducts,
       totalProducts: cartProducts.reduce((sum, { amount }) => sum + amount, 0),
+      totalPrice: cartProducts.reduce(
+        (sum, { amount, price }) => sum + amount * price,
+        0
+      ),
     }),
     [addProductToCart, cartProducts, removeProductFromCart]
   );
