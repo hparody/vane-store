@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Box, Grid, Button, Typography } from "@mui/material";
 import AddBoxIcon from "@mui/icons-material/AddBox";
 
@@ -13,6 +13,11 @@ const Products = () => {
 
   const [openProductForm, setOpenProductForm] = useState(false);
   const [action, setAction] = useState(ACTION_CREATE);
+
+  useEffect(() => {
+    fetchProducts();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const handleAddingProduct = () => {
     setAction(ACTION_CREATE);

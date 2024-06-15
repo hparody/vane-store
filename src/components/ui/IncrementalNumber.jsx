@@ -1,5 +1,5 @@
-import * as React from "react";
-import { styled, forwardRef } from "@mui/material";
+import { forwardRef } from "react";
+import { styled } from "@mui/material";
 import { Unstable_NumberInput as BaseNumberInput } from "@mui/base/Unstable_NumberInput";
 import RemoveIcon from "@mui/icons-material/Remove";
 import AddIcon from "@mui/icons-material/Add";

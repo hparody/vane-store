@@ -1,4 +1,4 @@
-import useProducts from "@/hooks/useProducts";
+import { useEffect } from "react";
 import {
   Box,
   Grid,
@@ -13,8 +13,9 @@ import {
   cardContentClasses,
 } from "@mui/material";
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
-import useShoppingCart from "@/hooks/useShoppingCart";
 
+import useShoppingCart from "@/hooks/useShoppingCart";
+import useProducts from "@/hooks/useProducts";
 import DefaultProductImage from "@/assets/default-image.jpg";
 
 const LoadingProductsSkeleton = () => {
@@ -78,8 +79,14 @@ const Card = styled(MuiCard)`
 `;
 
 const Home = () => {
-  const { products, loading } = useProducts();
+  const { products, loading, fetchProducts } = useProducts();
   const { addProductToCart, removeProductFromCart } = useShoppingCart();
+
+  useEffect(() => {
+    fetchProducts();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   if (loading) return <LoadingProductsSkeleton />;
   return (
     <Grid container spacing={2}>

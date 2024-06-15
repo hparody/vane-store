@@ -1,11 +1,9 @@
 import PropTypes from "prop-types";
-import { useMemo, useCallback, useState, useEffect } from "react";
+import { useMemo, useCallback, useState } from "react";
 
 import { ProductsContext } from "@/contexts";
 import useApi from "@/hooks/useApi";
 import useHttpAdapter from "@/hooks/useHttpAdapter";
-
-import dummyProducts from "@/mocks/products.json";
 
 const ProductsProvider = ({ children }) => {
   const { getRequest, postRequest, loading, error } = useApi();
@@ -18,7 +16,6 @@ const ProductsProvider = ({ children }) => {
       setProducts(data);
     } catch (err) {
       console.error("Error fetching products:", err);
-      setProducts(dummyProducts);
     }
   }, [getRequest]);
 
@@ -32,7 +29,11 @@ const ProductsProvider = ({ children }) => {
   const createProduct = useCallback(
     async (productInfo) => {
       try {
-        const response = await postRequest("/create/product");
+        const response = await postRequest("/create/product", {
+          ...productInfo,
+          price: parseFloat(productInfo.price),
+        });
+        if (response.error) return { error: true, data: response };
         return { error: false, data: response };
       } catch (err) {
         console.error("Error cre products:", err);
@@ -54,11 +55,6 @@ const ProductsProvider = ({ children }) => {
     },
     [postHttp]
   );
-
-  useEffect(() => {
-    fetchProducts();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   const contextValue = useMemo(
     () => ({

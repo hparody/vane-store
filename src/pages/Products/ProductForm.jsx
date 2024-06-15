@@ -77,6 +77,11 @@ const ProductForm = ({
   const cleanValues = () => setValues(DEFAULT_VALUES);
   const cleanErorrs = () => setErrors(DEFAULT_ERRORS);
 
+  // Unmount component
+  useEffect(() => {
+    return cleanValues();
+  }, []);
+
   const isFieldValid = (fieldName, fieldValue) => {
     if (fieldName === "image") return true;
     let hasError = false;
@@ -126,10 +131,10 @@ const ProductForm = ({
     return !fieldsHaveErrors && fieldsFilled;
   }, [errors, values]);
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (areAllFieldsValid()) {
       setSavingForm(true);
-      const { error, response } = createProduct(values);
+      const { error, response } = await createProduct(values);
       if (!error) {
         triggerAlert({
           type: "success",
