@@ -14,20 +14,16 @@ const Products = () => {
   const [openProductForm, setOpenProductForm] = useState(false);
   const [action, setAction] = useState(ACTION_CREATE);
 
-  const handleOpenProductForm = (state) => {
-    setOpenProductForm(state);
-  };
-
   const handleAddingProduct = () => {
     setAction(ACTION_CREATE);
-    handleOpenProductForm(true);
+    setOpenProductForm(true);
   };
 
   const onEditProduct = (productId) => {
     console.log("Edit", getProduct(productId));
     setAction(ACTION_EDIT);
     setSelectedProduct(getProduct(productId));
-    handleOpenProductForm(true);
+    setOpenProductForm(true);
   };
 
   const onDeleteProduct = (productId) => {
@@ -35,6 +31,12 @@ const Products = () => {
     console.log("Delete", productId);
     /** LOGIC TO DELETE */
     fetchProducts(); // Fetch new products after the deletion
+  };
+
+  const handleCloseProductForm = () => {
+    setOpenProductForm(false);
+    setSelectedProduct(null);
+    setAction(ACTION_CREATE);
   };
 
   return (
@@ -67,8 +69,8 @@ const Products = () => {
       <ProductForm
         openForm={openProductForm}
         action={action}
-        onOpenForm={() => handleOpenProductForm(true)}
-        onCloseForm={() => handleOpenProductForm(false)}
+        onOpenForm={() => setOpenProductForm(true)}
+        onCloseForm={handleCloseProductForm}
         product={selectedProduct}
       />
     </Box>
