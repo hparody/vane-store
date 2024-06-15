@@ -1,38 +1,14 @@
 import PropTypes from "prop-types";
-import { useEffect, useMemo, useCallback } from "react";
+import { useMemo, useCallback } from "react";
 
 import { AuthContext } from "@/contexts";
 import useApi from "@/hooks/useApi";
 import useLocalStorage from "@/hooks/useLocalStorage";
 import { isUserLoggedIn, isAdminRole } from "@/utils/user";
 
-const DUMMY_USER = {
-  email: "hemelparody@hotmail.com",
-  name: "Hemel Parody",
-  address: "TV 24 # 18A - 26",
-  role: "admin",
-};
-
 const AuthProvider = ({ children }) => {
   const [user, setUser] = useLocalStorage("user", null);
   const { postRequest, loading, error } = useApi();
-  /*
-  useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const response = await getRequest("/api/user", {
-          withCredentials: true,
-        });
-        setUser(response.data);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
-    fetchUser();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-  */
 
   const isLoggedIn = useMemo(() => isUserLoggedIn(user), [user]);
 
@@ -74,8 +50,15 @@ const AuthProvider = ({ children }) => {
           email,
           password,
         });
-        setUser(response.data);
-        return { error: false, data: response.data };
+        let userResponse;
+        if (response.data === "User registered successfully") {
+          userResponse = { name, address, email, role: "user" };
+        } else {
+          userResponse = null;
+          return { error: false, data: response.data };
+        }
+        setUser(userResponse);
+        return { error: false, data: userResponse };
       } catch (error) {
         setUser({ name, address, email, role: "user" }); // SET DUMMY USER
         console.error(error);
