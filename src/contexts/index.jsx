@@ -25,6 +25,8 @@ const AuthContext = createContext(initialAuth);
 const initialShoppingCart = {
   cartProducts: [],
   totalProducts: 0,
+  addProductToCart: null,
+  removeProductFromCart: null,
 };
 
 const ShoppingCartContext = createContext(initialShoppingCart);

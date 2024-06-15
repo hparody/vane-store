@@ -1,6 +1,6 @@
 import { Button } from "@mui/material";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
-import useShoppingCart from "@/hooks/useCartProducts";
+import useShoppingCart from "@/hooks/useShoppingCart";
 
 const ShoppingCart = (props) => {
   const { totalProducts } = useShoppingCart();
