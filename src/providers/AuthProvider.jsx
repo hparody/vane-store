@@ -7,10 +7,10 @@ import useLocalStorage from "@/hooks/useLocalStorage";
 import { isUserLoggedIn, isAdminRole } from "@/utils/user";
 
 const DUMMY_USER = {
-  username: "hemelparody@hotmail.com",
+  email: "hemelparody@hotmail.com",
   name: "Hemel Parody",
+  address: "TV 24 # 18A - 26",
   role: "admin",
-  token: "123456",
 };
 
 const AuthProvider = ({ children }) => {
@@ -63,6 +63,26 @@ const AuthProvider = ({ children }) => {
     }
   }, [postRequest, setUser]);
 
+  const signUp = useCallback(
+    async ({ name, address, email, password }) => {
+      try {
+        const response = await postRequest("/auth/register", {
+          name,
+          address,
+          email,
+          password,
+        });
+        setUser(response.data);
+        return { error: false, data: response.data };
+      } catch (error) {
+        setUser({ name, address, email, role: "user" }); // SET DUMMY USER
+        console.error(error);
+        return { error: true, data: error };
+      }
+    },
+    [postRequest, setUser]
+  );
+
   const contextValue = useMemo(
     () => ({
       user,
@@ -72,8 +92,9 @@ const AuthProvider = ({ children }) => {
       loading,
       login,
       logout,
+      signUp,
     }),
-    [error, isAdmin, isLoggedIn, loading, login, logout, user]
+    [error, isAdmin, isLoggedIn, loading, login, logout, signUp, user]
   );
 
   return (

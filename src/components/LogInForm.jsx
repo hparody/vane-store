@@ -97,7 +97,7 @@ const LogInForm = ({ onLogInSuccessful = () => {}, allowSignUp = false }) => {
       Object.values(values).every((fieldValue) => fieldValue !== "") &&
       !Object.values(errors).some((field) => field.error)
     );
-  }, [errors, values]);
+  }, [errors, validateField, values]);
 
   const handleChange = useCallback(
     (event) => {

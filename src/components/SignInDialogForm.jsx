@@ -61,7 +61,7 @@ const SignInDialogForm = ({ open, onClose }) => {
           sx={{ display: "flex", flexDirection: "row" }}
         >
           <Box component="div" flex={1}>
-            <LogInForm />
+            <LogInForm onLogInSuccessful={onClose} />
           </Box>
           <Divider
             variant="fullWidth"
@@ -70,7 +70,7 @@ const SignInDialogForm = ({ open, onClose }) => {
             sx={{ margin: "0px 32px" }}
           />
           <Box component="div" flex={1}>
-            <SignUpForm />
+            <SignUpForm onSignUpSuccessful={onClose} />
           </Box>
         </Box>
       </DialogContent>

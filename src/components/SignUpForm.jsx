@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-import { useState, useCallback, useEffect } from "react";
+import { useState, useCallback } from "react";
 import {
   styled,
   Box,
@@ -59,12 +59,12 @@ const List = styled("ul")`
 `;
 
 const passwordValidator = new RegExp(
-  /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[W_])[a-zA-Z0-9W_]{8,20}$/
+  /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[\W_])[a-zA-Z0-9\W_]{8,20}$/
 );
 
 const SignUpForm = ({ onSignUpSuccessful }) => {
   const { triggerAlert } = useAlert();
-  const { loading: signingUp } = useAuth();
+  const { loading: signingUp, signUp } = useAuth();
   const [values, setValues] = useState(DEFAULT_VALUES);
   const [errors, setErrors] = useState(DEFAULT_ERRORS);
 
@@ -83,6 +83,7 @@ const SignUpForm = ({ onSignUpSuccessful }) => {
       }
 
       if (fieldName === "password") {
+        debugger;
         isValid = passwordValidator.test(fieldValue);
       }
 
@@ -131,9 +132,23 @@ const SignUpForm = ({ onSignUpSuccessful }) => {
     return !fieldsHaveErrors && fieldsFilled;
   }, [errors, isFieldValid, values]);
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (areAllFieldsValid()) {
-      /** INSERT LOGIC FOR LOG IN */
+      /** INSERT LOGIC FOR SIGN UP */
+      const { error } = await signUp();
+      if (!error) {
+        triggerAlert({
+          type: "success",
+          message: "Su usuario ha sido registrado correctamente.",
+        });
+        if (onSignUpSuccessful) onSignUpSuccessful();
+      } else {
+        triggerAlert({
+          type: "error",
+          message:
+            "Ha ocurrido un error inesperado, por favor intente registrarse más tarde.",
+        });
+      }
     } else {
       triggerAlert({
         type: "error",
@@ -285,7 +300,12 @@ const SignUpForm = ({ onSignUpSuccessful }) => {
           <li>1 caracter especial.</li>
         </List>
       </Message>
-      <Button variant="contained" startIcon={<HowToRegIcon />}>
+      <Button
+        disabled={signingUp}
+        type="submit"
+        variant="contained"
+        startIcon={<HowToRegIcon />}
+      >
         Registrarme
       </Button>
     </Box>

@@ -18,6 +18,7 @@ const initialAuth = {
   loading: false,
   login: null,
   logout: null,
+  signUp: null,
 };
 
 const AuthContext = createContext(initialAuth);
