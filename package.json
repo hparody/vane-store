@@ -54,5 +54,8 @@
     "jest-transformer-svg": "^2.0.2",
     "vite": "^5.2.0",
     "vite-plugin-eslint": "^1.8.1"
+  },
+  "optionalDependencies": {
+    "@rollup/rollup-linux-x64-gnu": "4.9.5"
   }
 }
