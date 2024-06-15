@@ -21,8 +21,8 @@ const AuthProvider = ({ children }) => {
           email,
           password,
         });
-        setUser(response.data);
-        return { error: false, data: response.data };
+        setUser(response);
+        return { error: false, data: response };
       } catch (error) {
         console.error(error);
         return { error: true, data: error };
@@ -33,13 +33,12 @@ const AuthProvider = ({ children }) => {
 
   const logout = useCallback(async () => {
     try {
-      await postRequest("/api/logout", {}, { withCredentials: true });
+      // await postRequest("/api/logout", {}, { withCredentials: true });
       setUser(null);
     } catch (error) {
-      setUser(null); // DUMMY LOGOUT
       console.error(error);
     }
-  }, [postRequest, setUser]);
+  }, [setUser]);
 
   const signUp = useCallback(
     async ({ name, address, email, password }) => {
@@ -51,11 +50,12 @@ const AuthProvider = ({ children }) => {
           password,
         });
         let userResponse;
-        if (response.data === "User registered successfully") {
+        debugger;
+        if (response === "User registered successfully") {
           userResponse = { name, address, email, role: "user" };
         } else {
           userResponse = null;
-          return { error: false, data: response.data };
+          return { error: false, data: null };
         }
         setUser(userResponse);
         return { error: false, data: userResponse };

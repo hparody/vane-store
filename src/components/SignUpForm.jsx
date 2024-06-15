@@ -131,10 +131,16 @@ const SignUpForm = ({ onSignUpSuccessful }) => {
     return !fieldsHaveErrors && fieldsFilled;
   }, [errors, isFieldValid, values]);
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (event) => {
+    event.preventDefault();
     if (areAllFieldsValid()) {
       /** INSERT LOGIC FOR SIGN UP */
-      const { error } = await signUp();
+      const { error } = await signUp({
+        name: values.name,
+        address: values.address,
+        email: values.email,
+        password: values.password,
+      });
       if (!error) {
         triggerAlert({
           type: "success",
@@ -299,9 +305,10 @@ const SignUpForm = ({ onSignUpSuccessful }) => {
       </Message>
       <Button
         disabled={signingUp}
-        type="submit"
+        type="button"
         variant="contained"
         startIcon={<HowToRegIcon />}
+        onSubmit={handleSubmit}
       >
         Registrarme
       </Button>
