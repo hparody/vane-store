@@ -172,7 +172,7 @@ const LogInForm = ({ onLogInSuccessful = () => {}, allowSignUp = false }) => {
           Olvidé mi contraseña
         </Link>
         <Button
-          type="button"
+          type="submit"
           color="primary"
           variant="contained"
           onClick={handleSubmit}
