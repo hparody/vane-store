@@ -61,21 +61,14 @@ const LogInForm = ({ onLogInSuccessful = () => {}, allowSignUp = false }) => {
       message: "Inicio de sesión exitoso.",
       type: "success",
     });
-    onLogInSuccessful();
+    if (onLogInSuccessful) onLogInSuccessful();
   }, [onLogInSuccessful, triggerAlert]);
 
   useEffect(() => {
-    if (user?.token) {
+    if (user?.name) {
       logInUser();
     }
   }, [logInUser, user]);
-
-  const areFieldsValid = useCallback(() => {
-    return (
-      Object.values(values).every((fieldValue) => fieldValue !== "") &&
-      !Object.values(errors).some((field) => field.error)
-    );
-  }, [errors, values]);
 
   const validateField = useCallback(
     (fieldName, fieldValue) => {
@@ -96,6 +89,15 @@ const LogInForm = ({ onLogInSuccessful = () => {}, allowSignUp = false }) => {
     },
     [errors]
   );
+
+  const areFieldsValid = useCallback(() => {
+    validateField("username", values.username);
+    validateField("password", values.password);
+    return (
+      Object.values(values).every((fieldValue) => fieldValue !== "") &&
+      !Object.values(errors).some((field) => field.error)
+    );
+  }, [errors, values]);
 
   const handleChange = useCallback(
     (event) => {
@@ -127,7 +129,7 @@ const LogInForm = ({ onLogInSuccessful = () => {}, allowSignUp = false }) => {
         flexDirection: "column",
         justifyContent: "center",
         alignContent: "center",
-        gap: "16px",
+        gap: "20px",
       }}
       onSubmit={handleSubmit}
     >
