@@ -15,6 +15,7 @@ import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import Drawer from "@/components/ui/Drawer";
 import useShoppingCart from "@/hooks/useShoppingCart";
 import useProducts from "@/hooks/useProducts";
+import useAlert from "@/hooks/useAlert";
 
 const ProductCardShop = styled(MuiCard)`
   height: 160px;
@@ -25,7 +26,9 @@ const ProductCardShop = styled(MuiCard)`
 `;
 
 const ShoppingCart = (props) => {
-  const { cartProducts, totalProducts, totalPrice } = useShoppingCart();
+  const { cartProducts, totalProducts, totalPrice, createOrder } =
+    useShoppingCart();
+  const { triggerAlert } = useAlert();
   const { getProduct } = useProducts();
   const [openShoppingCart, setOpenShoppingCart] = useState(false);
 
@@ -34,6 +37,18 @@ const ShoppingCart = (props) => {
       cartProducts.map(({ id, amount }) => ({ ...getProduct(id), id, amount })),
     [cartProducts, getProduct]
   );
+
+  const handleCreateOrder = async () => {
+    const { error, response } = await createOrder(cartProducts);
+    if (error) {
+      triggerAlert({ type: "error", message: "" });
+    } else {
+      triggerAlert({
+        type: "success",
+        message: `Orden creada exitosamente con id ${response.id}.`,
+      });
+    }
+  };
 
   return (
     <Fragment>
@@ -99,27 +114,46 @@ const ShoppingCart = (props) => {
               </ProductCardShop>
             </Grid>
           ))}
-          <Divider
-            variant="middle"
-            orientation="horizontal"
-            flexItem
-            sx={{ margin: "0px 20px" }}
-          />
-          <Typography variant="h5" lineHeight={1} gutterBottom>
-            Precio total: <b>{totalPrice}</b>
-          </Typography>
-          <Message variant="outlined" severity="info">
-            Por el momento solo contamos con pagos contraentrega. Su pedido será
-            enviado a la dirección ingresada al registrarse en el sistema.
-          </Message>
-          <Button
-            type="submit"
-            variant="contained"
-            color="primary"
-            startIcon={<ShoppingCartIcon />}
-          >
-            Confirmar Pedido
-          </Button>
+          {totalProducts !== 0 ? (
+            <Fragment>
+              <Grid item xs={12}>
+                <Divider
+                  variant="middle"
+                  orientation="horizontal"
+                  flexItem
+                  sx={{ margin: "0px 20px" }}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <Typography variant="h5" lineHeight={1} gutterBottom>
+                  Precio total: <b>$ {totalPrice}</b>
+                </Typography>
+                <Message variant="outlined" severity="info">
+                  Por el momento solo contamos con pagos contraentrega. Su
+                  pedido será enviado a la dirección ingresada al registrarse en
+                  el sistema.
+                </Message>
+              </Grid>
+              <Grid item xs={12}>
+                <Button
+                  type="submit"
+                  variant="contained"
+                  color="primary"
+                  startIcon={<ShoppingCartIcon />}
+                  fullWidth
+                  onClick={handleCreateOrder}
+                >
+                  Confirmar Pedido
+                </Button>
+              </Grid>
+            </Fragment>
+          ) : (
+            <Grid item xs={12}>
+              <Typography variant="h5" lineHeight={1} gutterBottom>
+                No tienes productos en tu carrito de compras.
+              </Typography>
+            </Grid>
+          )}
         </Grid>
       </Drawer>
     </Fragment>

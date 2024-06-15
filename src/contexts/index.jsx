@@ -28,6 +28,7 @@ const initialShoppingCart = {
   totalProducts: 0,
   addProductToCart: null,
   removeProductFromCart: null,
+  createOrder: null,
 };
 
 const ShoppingCartContext = createContext(initialShoppingCart);

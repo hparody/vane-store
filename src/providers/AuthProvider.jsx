@@ -50,7 +50,6 @@ const AuthProvider = ({ children }) => {
           password,
         });
         let userResponse;
-        debugger;
         if (response === "User registered successfully") {
           userResponse = { name, address, email, role: "user" };
         } else {

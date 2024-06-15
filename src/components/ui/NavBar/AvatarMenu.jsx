@@ -10,8 +10,10 @@ import {
 import Logout from "@mui/icons-material/Logout";
 
 import useAuth from "@/hooks/useAuth";
+import useAlert from "@/hooks/useAlert";
 
 const AvatarMenu = () => {
+  const { triggerAlert } = useAlert();
   const [anchorMenuElement, setAnchorMenuElement] = useState();
   const { user, isLoggedIn, logout } = useAuth();
 
@@ -31,6 +33,11 @@ const AvatarMenu = () => {
 
   const onCloseAvatarMenu = () => {
     setAnchorMenuElement(null);
+  };
+
+  const handleLogout = () => {
+    logout();
+    triggerAlert({ type: "success", message: "Cerraste sesión exitosamente." });
   };
 
   return (
@@ -59,7 +66,7 @@ const AvatarMenu = () => {
           </ListItemIcon>
           Profile
         </MenuItem>
-        <MenuItem onClick={() => logout()}>
+        <MenuItem onClick={handleLogout}>
           <ListItemIcon>
             <Logout fontSize="small" />
           </ListItemIcon>

@@ -1,10 +1,36 @@
 import PropTypes from "prop-types";
+
 import { useCallback, useMemo } from "react";
 import { ShoppingCartContext } from "@/contexts";
+import useProducts from "@/hooks/useProducts";
+import useApi from "@/hooks/useApi";
 import useLocalStorage from "@/hooks/useLocalStorage";
+import useAuth from "@/hooks/useAuth";
 
 const ShoppingCartProvider = ({ children }) => {
+  const { getProduct } = useProducts();
+  const { postRequest } = useApi();
   const [cartProducts, setCartProducts] = useLocalStorage("shopping-cart", []);
+  const { user } = useAuth();
+
+  const createOrder = useCallback(
+    async (products) => {
+      try {
+        const response = await postRequest("/create/order", {
+          products,
+          vnuser: user.email,
+          date: new Date().toISOString().split("T")[0],
+        });
+
+        return { error: false, data: response };
+      } catch (error) {
+        // SET DUMMY USER
+        console.error(error);
+        return { error: true, data: error };
+      }
+    },
+    [postRequest, user]
+  );
 
   const addProductToCart = useCallback(
     (productId) => {
@@ -30,18 +56,33 @@ const ShoppingCartProvider = ({ children }) => {
     [cartProducts, setCartProducts]
   );
 
+  const totalPrice = useMemo(
+    () =>
+      cartProducts
+        .map(({ id, amount }) => ({
+          ...getProduct(id),
+          amount,
+        }))
+        .reduce((sum, { amount, price }) => sum + amount * price, 0),
+    [cartProducts, getProduct]
+  );
+
   const contextValue = useMemo(
     () => ({
       addProductToCart,
       removeProductFromCart,
       cartProducts,
       totalProducts: cartProducts.reduce((sum, { amount }) => sum + amount, 0),
-      totalPrice: cartProducts.reduce(
-        (sum, { amount, price }) => sum + amount * price,
-        0
-      ),
+      totalPrice,
+      createOrder,
     }),
-    [addProductToCart, cartProducts, removeProductFromCart]
+    [
+      addProductToCart,
+      cartProducts,
+      createOrder,
+      removeProductFromCart,
+      totalPrice,
+    ]
   );
 
   return (
