@@ -59,7 +59,7 @@ const List = styled("ul")`
 `;
 
 const passwordValidator = new RegExp(
-  /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[\W_])[a-zA-Z0-9\W_]{8,20}$/
+  /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[\W_])[a-zA-Z0-9\W_]{8,20}$/
 );
 
 const SignUpForm = ({ onSignUpSuccessful }) => {
@@ -83,7 +83,6 @@ const SignUpForm = ({ onSignUpSuccessful }) => {
       }
 
       if (fieldName === "password") {
-        debugger;
         isValid = passwordValidator.test(fieldValue);
       }
 
@@ -269,7 +268,6 @@ const SignUpForm = ({ onSignUpSuccessful }) => {
         inputProps={{
           maxLength: 20,
           minLength: 8,
-          pattern: passwordValidator,
         }}
       />
       <PasswordInput
@@ -287,7 +285,6 @@ const SignUpForm = ({ onSignUpSuccessful }) => {
         inputProps={{
           maxLength: 20,
           minLength: 8,
-          pattern: passwordValidator,
         }}
       />
       <Message variant="outlined" severity="info">
@@ -295,7 +292,7 @@ const SignUpForm = ({ onSignUpSuccessful }) => {
         <List>
           <li>Entre 8 y 20 caracteres.</li>
           <li>1 letra mayúscula.</li>
-          <li>1 letra en mayúscula.</li>
+          <li>1 letra en minúscula.</li>
           <li>1 número.</li>
           <li>1 caracter especial.</li>
         </List>
