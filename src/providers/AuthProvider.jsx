@@ -15,8 +15,8 @@ const DUMMY_USER = {
 
 const AuthProvider = ({ children }) => {
   const [user, setUser] = useLocalStorage("user", null);
-  const { getRequest, postRequest, loading, error } = useApi();
-
+  const { postRequest, loading, error } = useApi();
+  /*
   useEffect(() => {
     const fetchUser = async () => {
       try {
@@ -32,22 +32,24 @@ const AuthProvider = ({ children }) => {
     fetchUser();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+  */
 
   const isLoggedIn = useMemo(() => isUserLoggedIn(user), [user]);
 
   const isAdmin = useMemo(() => isAdminRole(user), [user]);
 
   const login = useCallback(
-    async (username, password) => {
+    async ({ username: email, password }) => {
       try {
-        const response = await postRequest("/api/login", {
-          username,
+        const response = await postRequest("/auth/login", {
+          email,
           password,
         });
         setUser(response.data);
+        return { error: false, data: response.data };
       } catch (error) {
-        setUser(DUMMY_USER); // SET DUMMY USER
         console.error(error);
+        return { error: true, data: error };
       }
     },
     [postRequest, setUser]

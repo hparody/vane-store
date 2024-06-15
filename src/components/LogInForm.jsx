@@ -28,7 +28,7 @@ const OTP_CODE_LENGTH = 6;
 
 const LogInForm = ({ onLogInSuccessful = () => {}, allowSignUp = false }) => {
   const { triggerAlert } = useAlert();
-  const { user, login } = useAuth();
+  const { login } = useAuth();
 
   const [values, setValues] = useState({ username: "", password: "" });
   const [errors, setErrors] = useState({
@@ -38,21 +38,6 @@ const LogInForm = ({ onLogInSuccessful = () => {}, allowSignUp = false }) => {
   const [logginIn, setLogginIn] = useState(false);
   const [showOtpValidation, setShowOtpValidation] = useState(false);
   const [otpValue, setOtpValue] = useState("");
-
-  /** Validate OTP Value */
-  useEffect(() => {
-    if (otpValue.length === OTP_CODE_LENGTH) {
-      /** INSERT LOGIC FOR OTP CODE VALIDATION */
-      if (otpValue === "111111") {
-        login();
-      } else {
-        triggerAlert({
-          message: "El código de verificación es incorrecto",
-          type: "error",
-        });
-      }
-    }
-  }, [otpValue, onLogInSuccessful, triggerAlert, login]);
 
   const logInUser = useCallback(() => {
     setShowOtpValidation(false);
@@ -64,11 +49,20 @@ const LogInForm = ({ onLogInSuccessful = () => {}, allowSignUp = false }) => {
     if (onLogInSuccessful) onLogInSuccessful();
   }, [onLogInSuccessful, triggerAlert]);
 
+  /** Validate OTP Value */
   useEffect(() => {
-    if (user?.name) {
-      logInUser();
+    if (otpValue.length === OTP_CODE_LENGTH) {
+      /** INSERT LOGIC FOR OTP CODE VALIDATION */
+      if (otpValue === "111111") {
+        logInUser();
+      } else {
+        triggerAlert({
+          message: "El código de verificación es incorrecto",
+          type: "error",
+        });
+      }
     }
-  }, [logInUser, user]);
+  }, [otpValue, onLogInSuccessful, triggerAlert, login, logInUser]);
 
   const validateField = useCallback(
     (fieldName, fieldValue) => {
@@ -107,11 +101,24 @@ const LogInForm = ({ onLogInSuccessful = () => {}, allowSignUp = false }) => {
     [values, validateField]
   );
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (areFieldsValid()) {
       setLogginIn(true);
       /** INSERT LOGIC FOR LOG IN */
-      setShowOtpValidation(true);
+      const { error } = await login({
+        username: values.username,
+        password: values.password,
+      });
+      if (error) {
+        setLogginIn(false);
+        setShowOtpValidation(false);
+        triggerAlert({
+          message: "Error: usuario o contraseña inválida.",
+          type: "error",
+        });
+      } else {
+        setShowOtpValidation(true);
+      }
     } else {
       triggerAlert({
         type: "error",
@@ -172,7 +179,7 @@ const LogInForm = ({ onLogInSuccessful = () => {}, allowSignUp = false }) => {
         Olvidé mi contraseña
       </Link>
       <Button
-        type="submit"
+        type="button"
         color="primary"
         variant="contained"
         onClick={handleSubmit}
