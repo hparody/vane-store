@@ -1,22 +1,24 @@
-import { useCallback, useState, useMemo } from "react";
+import PropTypes from "prop-types";
+import { useCallback, useMemo } from "react";
 import { ShoppingCartContext } from "@/contexts";
+import useLocalStorage from "@/hooks/useLocalStorage";
 
-const ShoppingCartProvider = () => {
-  const [cartProducts, setCartProducts] = useState([]);
+const ShoppingCartProvider = ({ children }) => {
+  const [cartProducts, setCartProducts] = useLocalStorage("shopping-cart", []);
 
   const addProductToCart = useCallback(
     (productId) => {
       let newProducts = [];
       if (cartProducts.some((cartProduct) => cartProduct.id === productId)) {
         newProducts = cartProducts.map(({ id, amount }) =>
-          id === productId ? { id, amount: amount++ } : { id, amount }
+          id === productId ? { id, amount: amount + 1 } : { id, amount }
         );
       } else {
         newProducts = [...cartProducts, { id: productId, amount: 1 }];
       }
       setCartProducts(newProducts);
     },
-    [cartProducts]
+    [cartProducts, setCartProducts]
   );
 
   const removeProductFromCart = useCallback(
@@ -25,7 +27,7 @@ const ShoppingCartProvider = () => {
         ...cartProducts.filter((product) => product.id !== productId),
       ]);
     },
-    [cartProducts]
+    [cartProducts, setCartProducts]
   );
 
   const contextValue = useMemo(
@@ -33,16 +35,20 @@ const ShoppingCartProvider = () => {
       addProductToCart,
       removeProductFromCart,
       cartProducts,
-      totalProducts: cartProducts.length,
+      totalProducts: cartProducts.reduce((sum, { amount }) => sum + amount, 0),
     }),
     [addProductToCart, cartProducts, removeProductFromCart]
   );
 
   return (
-    <ShoppingCartContext.Provider
-      value={contextValue}
-    ></ShoppingCartContext.Provider>
+    <ShoppingCartContext.Provider value={contextValue}>
+      {children}
+    </ShoppingCartContext.Provider>
   );
+};
+
+ShoppingCartProvider.propTypes = {
+  children: PropTypes.node.isRequired,
 };
 
 export default ShoppingCartProvider;

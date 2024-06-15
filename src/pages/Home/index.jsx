@@ -13,6 +13,7 @@ import {
   cardContentClasses,
 } from "@mui/material";
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
+import useShoppingCart from "@/hooks/useShoppingCart";
 
 const LoadingProductsSkeleton = () => {
   return (
@@ -76,6 +77,7 @@ const Card = styled(MuiCard)`
 
 const Home = () => {
   const { products, loading } = useProducts();
+  const { addProductToCart, removeProductFromCart } = useShoppingCart();
   if (loading) return <LoadingProductsSkeleton />;
   return (
     <Grid container spacing={2}>
@@ -147,9 +149,6 @@ const Home = () => {
                     lineHeight: "1.2",
                     overflow: "hidden",
                     textOverflow: "ellipsis",
-                    display: "-webkit-box",
-                    "-webkit-line-clamp": 3,
-                    "-webkit-box-orient": "vertical",
                   }}
                   component="div"
                 >
@@ -161,6 +160,7 @@ const Home = () => {
                   disabled={product.stock === 0}
                   startIcon={<AddShoppingCartIcon />}
                   sx={{ width: "100%", marginTop: "auto" }}
+                  onClick={() => addProductToCart(product.id)}
                 >
                   Añadir al carrito
                 </Button>

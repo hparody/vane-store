@@ -1,5 +1,5 @@
 import { useState, useMemo, Fragment } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import {
   AppBar,
   Avatar,
@@ -34,6 +34,7 @@ const LogoImg = styled("img")`
 
 const NavBar = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const { user, isAdmin, isLoggedIn, logout } = useAuth();
   const [anchorMenuElement, setAnchorMenuElement] = useState();
   const openAvatarMenu = useMemo(
@@ -93,7 +94,9 @@ const NavBar = () => {
               Iniciar Sesión
             </Button>
           )}
-          <ShoppingCart sx={{ marginRight: "10px" }} />
+          {!location.pathname.includes("admin") && (
+            <ShoppingCart sx={{ marginRight: "10px" }} />
+          )}
           {isLoggedIn && (
             <Fragment>
               <Avatar
